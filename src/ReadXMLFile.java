@@ -10,16 +10,16 @@ public class ReadXMLFile {
         String[] strArr2=strArr[1].split("<",2);
         return strArr2[0];
     }
-    public static BayesianNetwork makeNetwork(String filename){
-        Hashtable<String,BayesianNode>BN= new Hashtable<String,BayesianNode>();
+    public static Hashtable<String,BayesianNode> makeNetwork(String filename){
+        Hashtable<String,BayesianNode>BN= new Hashtable<>();
         try {
             File xml= new File(filename);
             Scanner sc = new Scanner(xml);
             String name="",data2,data,ParentName;
-            ArrayList<String> arr=new ArrayList<String>();
+            ArrayList<String> arr;
             while (sc.hasNextLine()) {
                 data2=sc.nextLine();
-                arr=new ArrayList<String>();
+                arr=new ArrayList<>();
                 if (data2.contains("VAR")) {
                     while (sc.hasNextLine()) {
                         data = sc.nextLine();
@@ -35,9 +35,8 @@ public class ReadXMLFile {
                     }
                     BayesianNode node = new BayesianNode(name,arr);
                     BN.put(node.getName(),node);
-                    System.out.println(arr.toString());
+                    System.out.println(arr);
                 }if(data2.contains("DEF")){
-                    arr=new ArrayList<String>();
                     data=sc.nextLine();
                     name=(mySplit(data));
                     BayesianNode node =BN.get(name);
@@ -62,19 +61,18 @@ public class ReadXMLFile {
                     }
                 }
             }
-            System.out.println(BN.toString());
+            System.out.println(BN);
             System.out.println(BN.get("A").getCpt());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        BayesianNetwork BN2=new BayesianNetwork(BN);
-        return BN2;
+        return BN;
     }
 
     //P(B=T|J=T,M=T)
-    public static void main(String argv[]) {
+    public static void main(String []argv) {
         String filename="/home/avi/IdeaProjects/Algorithims_And_AI_Proj/src/alarm_net.xml";
-        BayesianNetwork BN =makeNetwork(filename);
+        BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
 
     }
 }
