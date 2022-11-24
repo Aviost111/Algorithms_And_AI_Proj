@@ -71,7 +71,7 @@ public class ReadXMLFile {
 
     //P(B=T|J=T,M=T)
     public static void main(String []argv) {
-        String filename="/home/avi/IdeaProjects/Algorithims_And_AI_Proj/src/alarm_net.xml";
+        String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
 
     }
