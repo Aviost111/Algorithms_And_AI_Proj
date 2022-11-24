@@ -10,7 +10,7 @@ public class ReadXMLFile {
         String[] strArr2=strArr[1].split("<",2);
         return strArr2[0];
     }
-    public static Hashtable<String,BayesianNode> makeNetwork(String filename){
+    public static BayesianNetwork makeNetwork(String filename){
         Hashtable<String,BayesianNode>BN= new Hashtable<String,BayesianNode>();
         try {
             File xml= new File(filename);
@@ -67,11 +67,14 @@ public class ReadXMLFile {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return BN;
+        BayesianNetwork BN2=new BayesianNetwork(BN);
+        return BN2;
     }
+
+    //P(B=T|J=T,M=T)
     public static void main(String argv[]) {
         String filename="/home/avi/IdeaProjects/Algorithims_And_AI_Proj/src/alarm_net.xml";
-        Hashtable<String,BayesianNode> BN =makeNetwork(filename);
+        BayesianNetwork BN =makeNetwork(filename);
 
     }
 }
