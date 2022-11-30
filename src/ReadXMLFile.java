@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Scanner;
+import java.util.*;
 
 public class ReadXMLFile {
     public static String mySplit(String str){
@@ -62,7 +60,7 @@ public class ReadXMLFile {
                 }
             }
             System.out.println(BN);
-            System.out.println(BN.get("A").getCpt());
+//            System.out.println(BN.get("A").getCpt());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -73,6 +71,45 @@ public class ReadXMLFile {
     public static void main(String []argv) {
         String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
+        BN.function1("P(B=T|J=T,M=T),1)");
+//        filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
+//        BayesianNetwork BnBig =new BayesianNetwork(makeNetwork(filename));
+        //off by a little
+        BN.function1("P(J=T|B=T),1");
+//        System.out.println(ans2);
+        //Scanner sc=new Scanner();
+//        String t="alarm_net.xml\n" +
+//                "P(B=T|J=T,M=T),1\n" +
+//                "P(B=T|J=T,M=T),2\n" +
+//                "P(B=T|J=T,M=T),3\n" +
+//                "P(J=T|B=T),1\n" +
+//                "P(J=T|B=T),2\n" +
+//                "P(J=T|B=T),3",v,w;
+//        Scanner scr = new Scanner(t),sc;
+//        v=scr.nextLine();
+//        v=scr.nextLine();
+//        String []arr=v.split("[()]")[1].split("[,|]");
+//        String []arr2=v.split("[()]")[1].split("[,|=]");
+//        System.out.println(Arrays.toString(arr2));
+//        Hashtable<String, BayesianNode> Bay=BN.getBN();
+//        ArrayList<Integer> arrI=new ArrayList<Integer>();
+//        arrI.add(1);
+//        arrI.add(1);
+//        arrI.add(1);
+//        System.out.println(Bay.get("A").getCpt().getProb(arrI));
+
+        //v=v.split(",")[v.split(",").length-1];
+//        System.out.println(Arrays.toString(arr));
+//        System.out.println(v);
+//        System.out.println(Arrays.toString(arr));
+//        while (scr.hasNextLine()){
+//            String []arr=v.split("[,|()]");
+//            System.out.println(Arrays.toString(arr));
+//            v=scr.nextLine();
+//        }
+//        System.out.println(Arrays.toString(arr));
+
+
 
     }
 }

@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+
+
 
 public class CPT {
     private ArrayList<BayesianNode> parents;
@@ -44,6 +47,22 @@ public class CPT {
 
     public void setTable(ArrayList<Double> table) {
         this.table = table;
+    }
+
+    public double getProb(ArrayList<Integer> arr){
+        int size=arr.size(),varsSize,sumOfVars=1,sum=0;
+        varsSize=this.vars.size();
+        for (int i=0;i<size-1;i++) {
+            sumOfVars=1;
+            for (int j = i+1; j < size-1; j++) {
+                int parentSize = this.parents.get(j).getVars().size();
+                sumOfVars *= parentSize;
+            }
+            sumOfVars*=varsSize;
+            sum+=(arr.get(i)-1)*sumOfVars;
+        }
+        sum+=arr.get(arr.size()-1);
+        return this.table.get(sum-1);
     }
 
     @Override
