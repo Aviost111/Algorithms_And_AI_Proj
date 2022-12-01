@@ -33,7 +33,7 @@ public class ReadXMLFile {
                     }
                     BayesianNode node = new BayesianNode(name,arr);
                     BN.put(node.getName(),node);
-                    System.out.println(arr);
+//                    System.out.println(arr);
                 }if(data2.contains("DEF")){
                     data=sc.nextLine();
                     name=(mySplit(data));
@@ -54,12 +54,13 @@ public class ReadXMLFile {
                             node.setCptTable(arr2);
                             node.setCptParents();
                             node.setCptVars();
+                            node.setCptName();
                         }
-                        System.out.println(data);
+//                        System.out.println(data);
                     }
                 }
             }
-            System.out.println(BN);
+//            System.out.println(BN);
 //            System.out.println(BN.get("A").getCpt());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -71,6 +72,9 @@ public class ReadXMLFile {
     public static void main(String []argv) {
         String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
+        BN.setFactors();
+        System.out.println(BN.getFactors());
+
         BN.function1("P(B=T|J=T,M=T),1)");
 //        filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
 //        BayesianNetwork BnBig =new BayesianNetwork(makeNetwork(filename));

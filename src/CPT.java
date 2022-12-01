@@ -3,13 +3,15 @@ import java.util.PriorityQueue;
 
 
 
-public class CPT {
+public class CPT implements Comparable{
+    private String name;
     private ArrayList<BayesianNode> parents;
     private ArrayList<String> vars;
     private ArrayList<Double> table;
 
-    public CPT(ArrayList<BayesianNode> parents, ArrayList<String> vars, ArrayList<Double> table) {
+    public CPT(ArrayList<BayesianNode> parents, ArrayList<String> vars, ArrayList<Double> table,String name) {
         this.parents = parents;
+        this.name=name;
         this.vars = vars;
         this.table = table;
     }
@@ -18,8 +20,22 @@ public class CPT {
         this.parents = new ArrayList<BayesianNode>();
         this.vars = new ArrayList<String>();
         this.table = new ArrayList<Double>();
+        this.name="";
+    }
+    public CPT copy(){
+        CPT copy=new CPT(this.parents,this.vars,this.table,this.name);
+        return copy;
+    }
+    public int getFactorSize(){
+        return this.table.size();
+    }
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
     public void arrToArrL(String [] arr){
         for (int i=0;i<arr.length;i++){
             this.table.add(Double.parseDouble(arr[i]));
@@ -67,9 +83,14 @@ public class CPT {
 
     @Override
     public String toString() {
-        return "CPT{" +
-                "vars=" + vars +
+        return "CPT{" +"name="+name+
+                ", vars=" + vars +
                 ", table=" + table +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

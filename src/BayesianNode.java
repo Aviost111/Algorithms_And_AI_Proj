@@ -31,7 +31,9 @@ public class BayesianNode {
     public ArrayList<String> getVars() {
         return vars;
     }
-
+    public void setCptName(){
+        this.cpt.setName(this.name);
+    }
     public void setVars(ArrayList<String> vars) {
         this.vars = vars;
     }
