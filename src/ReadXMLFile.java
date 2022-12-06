@@ -72,8 +72,18 @@ public class ReadXMLFile {
     public static void main(String []argv) {
         String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
-        BN.setFactors();
-        System.out.println(BN.getFactors());
+        ArrayList<String> evidence=new ArrayList<>();
+        evidence.add("E=T");
+        VariableElimination ve=new VariableElimination(BN,"blah",evidence);
+        System.out.println(ve.getFactors());
+        ve.updateFactorsByEvidence();
+        System.out.println(ve.getFactors());
+        BN=new BayesianNetwork(makeNetwork(filename));
+//        BN.setFactors();
+//        System.out.println(BN.getFactors());
+//        TODO add the option if the query is an option of a whole cpt return that option
+//        TODO round 5th digit for funct 2 and 3
+//        TODO add switch for each function
 
         BN.function1("P(B=T|J=T,M=T),1)");
 //        filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";

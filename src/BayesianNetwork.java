@@ -1,18 +1,18 @@
-import jdk.internal.util.xml.impl.Pair;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
-//import java.util.PriorityQueue;
 import java.util.Set;
 
 public class BayesianNetwork {
     private Hashtable<String,BayesianNode> BN;
-    private ArrayList<CPT> factors;
+//    private ArrayList<CPT> factors;
 
 
     public BayesianNetwork(Hashtable<String, BayesianNode> BN) {
         this.BN = BN;
-        this.factors=new ArrayList<>();
+//        this.factors=new ArrayList<>();
+    }
+    public int valueToNumber(String name,String value){
+        return this.BN.get(name).getVars().indexOf(value) + 1;
     }
     public void function1(String input){
         String []arr2=input.split("[()]")[1].split("[,|=]");
@@ -44,12 +44,10 @@ public class BayesianNetwork {
         //changes the list of all known variables
         for (int i=2;i<arr2.length;i=i+2){
             list=new ArrayList<>();
-            list.add(BN.get(arr2[i]).getVars().indexOf(arr2[i+1])+1);
+            list.add(valueToNumber(arr2[i],arr2[i+1]));
             tableOfLists.replace(arr2[i],list);
         }
         while(tableOfLists.get(keys.get(0)).get(indexes.get(0))!=null) {//does the addition while not every option has been done
-
-
             for (int i = 0; i < keys.size(); i++) {//goes over the keys and does the multiplication
                 list = new ArrayList<>();
                 for (BayesianNode key : BN.get(keys.get(i)).getParents()) {
@@ -67,7 +65,7 @@ public class BayesianNetwork {
             }
             adds++;
             subSum=1;
-            //need to add to the last index
+            //need to add to the last index to iterate
             for(int i=indexes.size()-1;i>=0;i--){
                 indexes.set(i,indexes.get(i)+1);
                 if(indexes.get(i)<tableOfLists.get(keys.get(i)).size()){
@@ -82,22 +80,22 @@ public class BayesianNetwork {
             }
         }
         adds--;//we added the first added that wasn't part of our actual addition because we started from numerator=0 and added;
-
-
-        System.out.println(numerator/denominator+","+adds+","+times);
+        double ans=numerator/denominator;
+        ans=Math.round(ans*100000)/100000.0d;
+        System.out.println(ans+","+adds+","+times);
     }
 
-    public ArrayList<CPT> getFactors() {
-        return factors;
-    }
-
-    public void setFactors() {
-        this.factors =new ArrayList<>();
-        Set<String> setKeys= BN.keySet();
-        for (String key:setKeys) {
-            this.factors.add(BN.get(key).getCpt().copy());
-        }
-    }
+//    public ArrayList<CPT> getFactors() {
+//        return factors;
+//    }
+//
+//    public void setFactors() {
+//        this.factors =new ArrayList<>();
+//        Set<String> setKeys= BN.keySet();
+//        for (String key:setKeys) {
+//            this.factors.add(BN.get(key).getCpt().copy());
+//        }
+//    }
 
     public Hashtable<String, BayesianNode> getBN() {
         return BN;

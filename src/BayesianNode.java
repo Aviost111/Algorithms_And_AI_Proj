@@ -4,8 +4,8 @@ public class BayesianNode {
     private String name;
     private ArrayList<String> vars;
     private CPT cpt;
-    private ArrayList<BayesianNode> parents= new ArrayList<BayesianNode>();
-    private ArrayList<BayesianNode> children= new ArrayList<BayesianNode>();
+    private ArrayList<BayesianNode> parents= new ArrayList<>();
+    private ArrayList<BayesianNode> children= new ArrayList<>();
 
     public BayesianNode(String name, ArrayList<String> vars, CPT cpt, ArrayList<BayesianNode> parents, ArrayList<BayesianNode> children) {
         this.name = name;
@@ -72,18 +72,18 @@ public class BayesianNode {
         this.children.add(child);
     }
     public String printChild(){
-        String names="";
-        for(int i=0;i<this.children.size();i++){
-            names=names+this.children.get(i).name+" ";
+        StringBuilder names= new StringBuilder();
+        for (BayesianNode child : this.children) {
+            names.append(child.name).append(" ");
         }
-        return names;
+        return names.toString();
     }
     public String printParent(){
-        String names="";
-        for(int i=0;i<this.parents.size();i++){
-            names=names+this.parents.get(i).name+" ";
+        StringBuilder names= new StringBuilder();
+        for (BayesianNode parent : this.parents) {
+            names.append(parent.name).append(" ");
         }
-        return names;
+        return names.toString();
     }
 
     @Override
