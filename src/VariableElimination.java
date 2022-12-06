@@ -23,9 +23,7 @@ public class VariableElimination {
             if (!evidence.contains(key))
                 hiddenVars.add(key);
         }
-        if (hiddenVars.contains(query)) {
-            hiddenVars.remove(query);
-        }
+        hiddenVars.remove(query);
         return hiddenVars;
     }
 
@@ -42,7 +40,50 @@ public class VariableElimination {
         }
         return arr;
     }
+    public void sortByAscii(ArrayList<String> arr){
+        int n = arr.size();
+        for (int i = 0; i < n - 1; i++){
+            for (int j = 0; j < n - i - 1; j++){
+                if (arr.get(j).charAt(0)>arr.get(j+1).charAt(0)) {
+                    // swap arr[j+1] and arr[j]
+                    String temp = arr.get(j);
+                    arr.set(j,arr.get(j+1));
+                    arr.set(j+1,temp);
+                    }
+            }
+        }
+    }
+    public CPT timesFactor(CPT factor1 ,CPT factor2){
 
+    }
+    public CPT join(ArrayList<CPT> _factors,int[] arr){
+        CPT factor1,factor2,newFactor;
+        while (_factors.size()>1){
+            factor1=_factors.remove(0);
+            factor2=_factors.remove(0);
+            newFactor=timesFactor(factor1,factor2);
+
+        }
+    }
+    public void function2(){
+        int [] arr=new int[2];
+        String hiddenName;
+        CPT afterJoin;
+        ArrayList<CPT> hiddenFactors;
+        sortByAscii(this.hidden);
+        while(!this.hidden.isEmpty()){
+            hiddenFactors=new ArrayList<>();
+            hiddenName=this.hidden.remove(0);
+            for (CPT fact:this.factors) {
+                if(fact.getFactorParams().contains(hiddenName)){
+                    hiddenFactors.add(fact);
+                }
+            }
+            sortBy1(hiddenFactors);
+            afterJoin=join(hiddenFactors,arr);
+            this.factors.add(afterJoin);
+        }
+    }
     public ArrayList<Double> updateProbTable(String name, int value, CPT factor, Boolean isNode) {
         ArrayList<Double> arr = new ArrayList<>();
         ArrayList<Integer> indexes = new ArrayList<>();
@@ -108,7 +149,19 @@ public class VariableElimination {
             this.factors.add(this.network.getBN().get(key).getCpt());
         }
     }
-
+    public void sortBy1(ArrayList<CPT> arr){
+        int n = arr.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr.get(j).big1(arr.get(j + 1))) {
+                    // swap arr[j+1] and arr[j]
+                    CPT temp = arr.get(j);
+                    arr.set(j, arr.get(j + 1));
+                    arr.set(j + 1, temp);
+                }
+            }
+        }
+    }
     public BayesianNetwork getNetwork() {
         return network;
     }

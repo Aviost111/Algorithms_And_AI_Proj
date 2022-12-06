@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="adding ve">
+    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="more">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BayesianNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNetwork.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BayesianNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CPT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CPT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ReadXMLFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ReadXMLFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -143,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669895502748</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="more">
+      <created>1670321772819</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1670321772819</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,7 +167,8 @@
     <MESSAGE value="create BayesianNetwork Class" />
     <MESSAGE value="function 1" />
     <MESSAGE value="adding ve" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding ve" />
+    <MESSAGE value="more" />
+    <option name="LAST_COMMIT_MESSAGE" value="more" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

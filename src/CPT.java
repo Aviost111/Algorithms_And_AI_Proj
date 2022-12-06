@@ -134,13 +134,16 @@ public class CPT {
         return sum;
     }
 
-    public boolean bigEquals1(CPT cpt) {
+    public boolean big1(CPT cpt) {
         if (this.table.size() > cpt.getFactorSize()) {
             return true;
         } else if (this.table.size() < cpt.getFactorSize()) {
             return false;
         } else if (toAscii(getFactorParams()) > cpt.toAscii(cpt.getFactorParams())) {
             return true;
-        } else return toAscii(getFactorParams()) >= cpt.toAscii(cpt.getFactorParams());
+        } else if(toAscii(getFactorParams()) < cpt.toAscii(cpt.getFactorParams())){
+            return false;
+        }
+        return false;
     }
 }
