@@ -73,12 +73,12 @@ public class ReadXMLFile {
         String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
         ArrayList<String> evidence=new ArrayList<>();
-        evidence.add("E=T");
-        VariableElimination ve=new VariableElimination(BN,"blah",evidence);
-        System.out.println(ve.getFactors());
-        ve.updateFactorsByEvidence();
-        System.out.println(ve.getFactors());
-        BN=new BayesianNetwork(makeNetwork(filename));
+//        evidence.add("E=T");
+//        VariableElimination ve=new VariableElimination(BN,"blah",evidence);
+//        System.out.println(ve.getFactors());
+//        ve.updateFactorsByEvidence();
+//        System.out.println(ve.getFactors());
+//        BN=new BayesianNetwork(makeNetwork(filename));
 //        BN.setFactors();
 //        System.out.println(BN.getFactors());
 //        TODO add the option if the query is an option of a whole cpt return that option

@@ -102,6 +102,7 @@ public class CPT {
         this.table = table;
     }
 
+    //gets an arraylist containing the value that i want(for example a=t,b=t,c=t) and returns the probability.
     public double getProb(ArrayList<Integer> arr) {
         int size = arr.size(), varsSize, sumOfVars, sum = 0;
         varsSize = this.vars.size();

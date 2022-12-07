@@ -53,17 +53,77 @@ public class VariableElimination {
             }
         }
     }
-    public CPT timesFactor(CPT factor1 ,CPT factor2){
+    public ArrayList<Double> timesFactorTable(CPT factor1 ,CPT factor2,int [] arr,boolean nameFromFac1,ArrayList<BayesianNode> parents){
+        ArrayList<Double> table=new ArrayList<>();
+        ArrayList<Integer> iterationNewF=new ArrayList<>(),iterationFac1,iterationFac2;
+        for (int i=0;i<parents.size()+1;i++){
+            iterationNewF.add(1);
+        }
+        int sizeOfNew=1;
+        for (BayesianNode parent:factor2.getParents()) {
+            if(factor1.getFactorParams().contains(parent.getName())||factor1.getFactorParams().contains()){
+                continue;
+            }
+            sizeOfNew*=parent.getVars().size();
+        }
+        if(!factor1.getFactorParams().contains(factor2.getName())){
+            sizeOfNew*=factor2.getVars().size();
+        }
+        sizeOfNew*=factor1.getFactorSize();
+
+
+
+
+
+
 
     }
-    public CPT join(ArrayList<CPT> _factors,int[] arr){
+    public CPT timesFactor(CPT factor1 ,CPT factor2,int [] arr,String hiddenName){
+        CPT newFactor=new CPT();
+        ArrayList<BayesianNode> parents;
+        //choose the query that isn't our hidden to be the name unless they're both the hidden
+        boolean nameIsFirstFac = false;
+        if(!factor2.getName().contains(hiddenName)){
+            newFactor.setName(factor2.getName());
+        }else{
+            newFactor.setName(factor1.getName());
+            nameIsFirstFac=true;
+        }
+        //add the variables of your name
+        this.network.getBN().get(newFactor.getName()).setCptVars();
+        //update parents
+        parents=factor1.getParents();
+        if(!nameIsFirstFac){
+            parents.add(this.network.getBN().get(factor1.getName()));
+        }
+        for (BayesianNode parent: factor2.getParents()) {
+            if(parents.contains(parent)){
+                continue;
+            }
+            parents.add(parent);
+        }
+        if(nameIsFirstFac){
+            parents.add(this.network.getBN().get(factor2.getName()));
+        }
+        newFactor.setParents(parents);
+        ArrayList<Double>table=timesFactorTable(factor1,factor2,arr,nameIsFirstFac,newFactor.getParents());
+
+
+
+
+        //TODO do the func haha
+        return newFactor;
+    }
+    public CPT join(ArrayList<CPT> _factors,int[] arr,String hiddenName){
         CPT factor1,factor2,newFactor;
         while (_factors.size()>1){
             factor1=_factors.remove(0);
             factor2=_factors.remove(0);
-            newFactor=timesFactor(factor1,factor2);
+            newFactor=timesFactor(factor1,factor2,arr,hiddenName);
+            //TODO add counter
 
         }
+        return ;
     }
     public void function2(){
         int [] arr=new int[2];
@@ -80,7 +140,7 @@ public class VariableElimination {
                 }
             }
             sortBy1(hiddenFactors);
-            afterJoin=join(hiddenFactors,arr);
+            afterJoin=join(hiddenFactors,arr,hiddenName);
             this.factors.add(afterJoin);
         }
     }
