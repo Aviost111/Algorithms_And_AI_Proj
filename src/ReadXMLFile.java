@@ -72,7 +72,7 @@ public class ReadXMLFile {
     public static void main(String []argv) {
         String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
-        ArrayList<String> evidence=new ArrayList<>();
+//        ArrayList<String> evidence=new ArrayList<>();
 //        evidence.add("E=T");
 //        VariableElimination ve=new VariableElimination(BN,"blah",evidence);
 //        System.out.println(ve.getFactors());

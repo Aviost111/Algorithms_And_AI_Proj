@@ -53,23 +53,21 @@ public class VariableElimination {
             }
         }
     }
-    public ArrayList<Double> timesFactorTable(CPT factor1 ,CPT factor2,int [] arr,boolean nameFromFac1,ArrayList<BayesianNode> parents){
+    public ArrayList<Double> timesFactorTable(CPT factor1 ,CPT factor2,int [] arr,boolean nameFromFac1,CPT newF){
         ArrayList<Double> table=new ArrayList<>();
         ArrayList<Integer> iterationNewF=new ArrayList<>(),iterationFac1,iterationFac2;
-        for (int i=0;i<parents.size()+1;i++){
+        for (int i=0;i<newF.getParents().size()+1;i++){
             iterationNewF.add(1);
         }
+        //finds new length of factor table
         int sizeOfNew=1;
-        for (BayesianNode parent:factor2.getParents()) {
-            if(factor1.getFactorParams().contains(parent.getName())||factor1.getFactorParams().contains()){
-                continue;
-            }
-            sizeOfNew*=parent.getVars().size();
+        for (BayesianNode parent: newF.getParents()) {
+            sizeOfNew *= parent.getVars().size();
         }
-        if(!factor1.getFactorParams().contains(factor2.getName())){
-            sizeOfNew*=factor2.getVars().size();
+        sizeOfNew*=this.network.getBN().get(newF.getName()).getVars().size();
+        for(int i=0;i<sizeOfNew;i++){
+//TODO start adding the info into new table
         }
-        sizeOfNew*=factor1.getFactorSize();
 
 
 
@@ -106,7 +104,7 @@ public class VariableElimination {
             parents.add(this.network.getBN().get(factor2.getName()));
         }
         newFactor.setParents(parents);
-        ArrayList<Double>table=timesFactorTable(factor1,factor2,arr,nameIsFirstFac,newFactor.getParents());
+        ArrayList<Double>table=timesFactorTable(factor1,factor2,arr,nameIsFirstFac,newFactor);
 
 
 

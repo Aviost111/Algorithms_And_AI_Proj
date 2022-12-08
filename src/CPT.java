@@ -26,11 +26,11 @@ public class CPT {
 //        return copy;
 //    }
     public String getFactorParams() {
-        String params = this.name;
+        StringBuilder params = new StringBuilder(this.name);
         for (BayesianNode node : this.parents) {
-            params += node.getName();
+            params.append(node.getName());
         }
-        return params;
+        return params.toString();
     }
 
     public int getFactorSize() {
@@ -102,7 +102,7 @@ public class CPT {
         this.table = table;
     }
 
-    //gets an arraylist containing the value that i want(for example a=t,b=t,c=t) and returns the probability.
+    //gets an arraylist containing the value that I want(for example a=t,b=t,c=t) and returns the probability.
     public double getProb(ArrayList<Integer> arr) {
         int size = arr.size(), varsSize, sumOfVars, sum = 0;
         varsSize = this.vars.size();
