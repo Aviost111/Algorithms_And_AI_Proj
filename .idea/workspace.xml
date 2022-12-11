@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="more">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HW1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/HW1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ReadXMLFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ReadXMLFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
     </list>
@@ -168,7 +169,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670499553928</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="more">
+      <created>1670522550793</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1670522550793</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,8 +208,8 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/ReadXMLFile.java</url>
-          <line>78</line>
-          <option name="timeStamp" value="19" />
+          <line>83</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

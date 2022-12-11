@@ -68,7 +68,7 @@ public class VariableElimination {
         int n = arr.size();
         for (int i = 0; i < n - 1; i++){
             for (int j = 0; j < n - i - 1; j++){
-                if (arr.get(j).charAt(0)>arr.get(j+1).charAt(0)) {
+                if (toAscii(arr.get(j))>toAscii(arr.get(j+1))) {
                     // swap arr[j+1] and arr[j]
                     String temp = arr.get(j);
                     arr.set(j,arr.get(j+1));
@@ -77,7 +77,7 @@ public class VariableElimination {
             }
         }
     }
-    public ArrayList<Double> timesFactorTable(CPT factor1 ,CPT factor2,int [] arr,boolean nameFromFac1,CPT newF){
+    public ArrayList<Double> timesFactorTable(CPT factor1 ,CPT factor2,double [] arr,boolean nameFromFac1,CPT newF){
         ArrayList<Double> table=new ArrayList<>();
         ArrayList<Integer> iterationNewF=new ArrayList<>(),iterationFac1,iterationFac2;
         double probOfTimes;
@@ -122,7 +122,7 @@ public class VariableElimination {
         }
         return table;
     }
-    public CPT eliminateHidden(CPT factor,String hiddenName,int[] arr ){
+    public CPT eliminateHidden(CPT factor,String hiddenName,double[] arr ){
         if (factor.getParents().size()==0) {
             return factor;
         }
@@ -181,7 +181,14 @@ public class VariableElimination {
         newFactor.setTable(table);
         return newFactor;
     }
-    public CPT timesFactor(CPT factor1 ,CPT factor2,int [] arr,String hiddenName){
+    public int toAscii(String params) {
+        int sum = 0;
+        for (int i = 0; i < params.length(); i++) {
+            sum += params.charAt(i);
+        }
+        return sum;
+    }
+    public CPT timesFactor(CPT factor1 ,CPT factor2,double [] arr,String hiddenName){
         CPT newFactor=new CPT();
         ArrayList<BayesianNode> newParents=new ArrayList<>();
         boolean nameIsFirstFac = false;
@@ -215,26 +222,44 @@ public class VariableElimination {
         newFactor.setTable(table);
         return newFactor;
     }
-    public CPT join(ArrayList<CPT> _factors,int[] arr,String hiddenName){
+    public CPT join(ArrayList<CPT> _factors,double[] arr,String hiddenName){
         CPT factor1,factor2,newFactor;
         while (_factors.size()>1){
             factor1=_factors.remove(0);
             factor2=_factors.remove(0);
             newFactor=timesFactor(factor1,factor2,arr,hiddenName);
             _factors.add(newFactor);
+            System.out.println(newFactor);
             sortBy1(_factors);
         }
         newFactor=eliminateHidden(_factors.get(0),hiddenName,arr);
         return newFactor;
     }
+    public ArrayList<String> sortHidden(ArrayList<String> hidden){
+        int size=hidden.get(0).length(),n= hidden.size();
+        for (int k=size-1;k>=0;k--){
+            for (int i = 0; i < n - 1; i++){
+                for (int j = 0; j < n - i - 1; j++){
+                    if (hidden.get(j).charAt(k)>hidden.get(j+1).charAt(k)) {
+                        // swap arr[j+1] and arr[j]
+                        String temp = hidden.get(j);
+                        hidden.set(j,hidden.get(j+1));
+                        hidden.set(j+1,temp);
+                    }
+                }
+            }
+        }
+        return hidden;
+    }
     public void function2(){
-        int [] arr=new int[2];
+        double [] arr=new double[3];
         String hiddenName;
         double sumOfFinal=0;
         CPT afterJoin,finalFactor;
         ArrayList<CPT> hiddenFactors;
+        removeLeafs();
         updateFactorsByEvidence();
-        sortByAscii(this.hidden);
+        sortHidden(this.hidden);
         while(!this.hidden.isEmpty()){
             hiddenFactors=new ArrayList<>();
             hiddenName=this.hidden.remove(0);
@@ -249,13 +274,20 @@ public class VariableElimination {
                     this.factors.remove(fact);
                 }
             }
+            if(hiddenFactors.size()==0){
+                continue;
+            }
             sortBy1(hiddenFactors);
             afterJoin=join(hiddenFactors,arr,hiddenName);
+            if(afterJoin.getFactorSize()<2){
+                continue;
+            }
             this.factors.add(afterJoin);
         }
+        sortBy1(this.factors);
         finalFactor=join(this.factors,arr,this.factors.get(0).getName());
         for(int i=0;i<finalFactor.getFactorSize();i++){
-            sumOfFinal=finalFactor.getTable().get(i);
+            sumOfFinal+=finalFactor.getTable().get(i);
             arr[1]+=1;
         }
         arr[1]-=1;
@@ -263,8 +295,9 @@ public class VariableElimination {
             finalFactor.getTable().set(i,(finalFactor.getTable().get(i))/sumOfFinal);
         }
         String [] wanted=this.query.split("=");
-        System.out.print(finalFactor.getTable().get(this.network.valueToNumber(wanted[0],wanted[1])-1));
-        System.out.println(","+arr[0]+" times and "+arr[1]+" additions");
+        arr[2]=finalFactor.getTable().get(this.network.valueToNumber(wanted[0],wanted[1])-1);
+        arr[2]=Math.round(arr[2]*100000)/100000.0d;
+        System.out.println(String.format("%.5f", arr[2])+","+(int)arr[1]+","+(int)arr[0]);
 
         //TODO finish pls
 
@@ -272,11 +305,13 @@ public class VariableElimination {
     public ArrayList<Double> updateProbTable(String name, int value, CPT factor, Boolean isNode) {
         ArrayList<Double> arr = new ArrayList<>();
         ArrayList<Integer> indexes = new ArrayList<>();
+        int size;
         for (int i = 0; i < factor.getParents().size() + 1; i++) {//makes indexes
             indexes.add(1);
         }
         if (isNode) {
-            for (int i = 0; i < factor.getTable().size(); i++) {
+            size=factor.getFactorSize();
+            for (int i = 0; i < size; i++) {
                 if (indexes.get(indexes.size() - 1) == value) {
                     arr.add(factor.getProb(indexes));
                 }
@@ -284,7 +319,8 @@ public class VariableElimination {
 
             }
         } else {
-            for (int i = 0; i < factor.getTable().size(); i++) {
+            size= factor.getFactorSize();
+            for (int i = 0; i < size; i++) {
                 if (indexes.get(factor.getParentIndex(name)) == value) {
                     arr.add(factor.getProb(indexes));
                 }
@@ -295,6 +331,29 @@ public class VariableElimination {
         return arr;
     }
 
+    public void removeLeafs(){
+        ArrayList<CPT> removeFactors=new ArrayList<>();
+
+        int size=this.factors.size();
+        CPT fact;
+        boolean inEvidence=false;
+        String query=this.query.split("=")[0];
+        for(int i=0;i<size;i++){
+            fact=this.factors.get(i);
+            for (int j=0;j<this.evidence.size();j++){
+                if(this.evidence.get(j).contains(fact.getName())){
+                    inEvidence=true;
+                }
+            }
+            if((this.network.getBN().get(fact.getName()).getChildren().size()==0)&&(!query.contains(fact.getName()))&&(!inEvidence)){
+                removeFactors.add(fact);
+            }
+            inEvidence=false;
+        }
+        for (CPT factor:removeFactors) {
+            this.factors.remove(factor);
+        }
+    }
     public void updateFactorsByEvidence() {
         ArrayList<Double> prob;
         ArrayList<CPT> oneValue = new ArrayList<>();
@@ -306,12 +365,10 @@ public class VariableElimination {
                 if (factor.getName().contains(eName)) {
                     prob = updateProbTable(eName, eVal, factor, true);
                     this.factors.get(this.factors.indexOf(factor)).setTable(prob);
-                    factor.setName(factor.getParents().remove(factor.getParents().size()-1).getName());
-                    factor.setVars(this.network.getBN().get(factor.getName()).getVars());
-//                    ArrayList<String> vars = new ArrayList<>();
-//                    vars.add(arr[1]);
-//                    this.factors.get(this.factors.indexOf(factor)).setVars(vars);
-
+                    if(factor.getParents().size()>0) {
+                        factor.setName(factor.getParents().remove(factor.getParents().size() - 1).getName());
+                        factor.setVars(this.network.getBN().get(factor.getName()).getVars());
+                    }
                 }
                 if (factor.containsParents(eName)) {
                     prob = updateProbTable(eName, eVal, factor, false);

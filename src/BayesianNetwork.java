@@ -15,6 +15,7 @@ public class BayesianNetwork {
         return this.BN.get(name).getVars().indexOf(value) + 1;
     }
     public void function1(String input){
+        double[] arr=new double[3];
         String []arr2=input.split("[()]")[1].split("[,|=]");
         double numerator=0,subSum=1,denominator=0;
         int times=0,adds=0;
@@ -82,7 +83,10 @@ public class BayesianNetwork {
         adds--;//we added the first added that wasn't part of our actual addition because we started from numerator=0 and added;
         double ans=numerator/denominator;
         ans=Math.round(ans*100000)/100000.0d;
-        System.out.println(ans+","+adds+","+times);
+        arr[0]=times;
+        arr[1]=times;
+        arr[2]=ans;
+        System.out.println(String.format("%.5f", arr[2])+","+(int)arr[0]+","+(int)arr[1]);
     }
 
 //    public ArrayList<CPT> getFactors() {
