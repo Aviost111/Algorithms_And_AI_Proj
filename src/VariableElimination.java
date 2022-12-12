@@ -258,6 +258,7 @@ public class VariableElimination {
         CPT afterJoin,finalFactor;
         ArrayList<CPT> hiddenFactors;
         removeLeafs();
+        this.hidden = getHidden();
         updateFactorsByEvidence();
         sortHidden(this.hidden);
         while(!this.hidden.isEmpty()){
@@ -331,28 +332,42 @@ public class VariableElimination {
         return arr;
     }
 
-    public void removeLeafs(){
-        ArrayList<CPT> removeFactors=new ArrayList<>();
+    public void removeLeafs() {
+        ArrayList<String> remove = new ArrayList<>();
+        int size = this.network.getBN().size();
+        Set<String> setKeys = this.network.getBN().keySet();
+        String query = this.query.split("=")[0];
+        boolean inEvidence = false, finished = false;
+        BayesianNode node;
 
-        int size=this.factors.size();
-        CPT fact;
-        boolean inEvidence=false;
-        String query=this.query.split("=")[0];
-        for(int i=0;i<size;i++){
-            fact=this.factors.get(i);
-            for (int j=0;j<this.evidence.size();j++){
-                if(this.evidence.get(j).contains(fact.getName())){
-                    inEvidence=true;
+        while (!finished) {
+            remove = new ArrayList<>();
+            for (String var : setKeys) {
+                inEvidence = false;
+                for (int j = 0; j < this.evidence.size(); j++) {
+                    if (this.evidence.get(j).contains(var)) {
+                        inEvidence = true;
+                        break;
+                    }
+                }
+
+                if ((this.network.getBN().get(var).getChildren().size() == 0) && (!inEvidence) && (!query.contains(var))) {
+                    remove.add(var);
                 }
             }
-            if((this.network.getBN().get(fact.getName()).getChildren().size()==0)&&(!query.contains(fact.getName()))&&(!inEvidence)){
-                removeFactors.add(fact);
+//            finished=true;//TODO why problem
+            if (remove.size() == 0) {
+                finished = true;
             }
-            inEvidence=false;
+            for (String name : remove) {
+                node = this.network.getBN().get(name);
+                for (BayesianNode parent : node.getParents()) {
+                    parent.getChildren().remove(node);
+                }
+                this.network.getBN().remove(name);
+            }
         }
-        for (CPT factor:removeFactors) {
-            this.factors.remove(factor);
-        }
+        setFactors();
     }
     public void updateFactorsByEvidence() {
         ArrayList<Double> prob;
