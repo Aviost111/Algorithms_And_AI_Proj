@@ -81,7 +81,7 @@ public class VariableElimination {
         ArrayList<Double> table=new ArrayList<>();
         ArrayList<Integer> iterationNewF=new ArrayList<>(),iterationFac1,iterationFac2;
         double probOfTimes;
-        int indexForFact2;
+        int indexForFact2,count=0,indexForFact1;
         //create iteration for new factor
         for (int i=0;i<newF.getParents().size()+1;i++){
             iterationNewF.add(1);
@@ -94,15 +94,21 @@ public class VariableElimination {
         sizeOfNew*=this.network.getBN().get(newF.getName()).getVars().size();
         //make table by multiplying factor 1 and factor 2
         for(int i=0;i<sizeOfNew;i++){
+            count++;
             iterationFac1=new ArrayList<>();
             iterationFac2=new ArrayList<>();
             //get iterator for factor 1 to know where to take the probability from
             for(int j=0;j<factor1.getParents().size();j++){
-                iterationFac1.add(iterationNewF.get(j));
+//                iterationFac1.add(iterationNewF.get(j));
+                indexForFact1=newF.getParents().indexOf(factor1.getParents().get(j));//gets the index for where parent at
+                // index j in old the factor is in the iterator of the new factor
+                iterationFac1.add(iterationNewF.get(indexForFact1));
             }
             //if query of fac1 isn't new query add him to the iterator of 1 after the last parent.
             if(!nameFromFac1) {
-                iterationFac1.add(iterationNewF.get(factor1.getParents().size()));
+//                iterationFac1.add(iterationNewF.get(factor1.getParents().size()));
+                indexForFact1=newF.getParents().indexOf(this.network.getBN().get(factor1.getName()));
+                iterationFac1.add(iterationNewF.get(indexForFact1));
             }else {//otherwise from the end of the iterator because that's where the query is represented
                 iterationFac1.add(iterationNewF.get(iterationNewF.size()-1));
             }
@@ -112,7 +118,12 @@ public class VariableElimination {
                 // index j in old the factor is in the iterator of the new factor
                 iterationFac2.add(iterationNewF.get(indexForFact2));
             }
-            iterationFac2.add(iterationNewF.get(iterationNewF.size()-1));
+            if(factor2.getName().contains(newF.getName())){
+                iterationFac2.add(iterationNewF.get(iterationNewF.size()-1));
+            }else{
+                indexForFact2=newF.getParents().indexOf(this.network.getBN().get(factor2.getName()));
+                iterationFac2.add(iterationNewF.get(indexForFact2));
+            }
             //compute the new prob
             probOfTimes=factor1.getProb(iterationFac1)*factor2.getProb(iterationFac2);
             //add to times 1
@@ -123,9 +134,6 @@ public class VariableElimination {
         return table;
     }
     public CPT eliminateHidden(CPT factor,String hiddenName,double[] arr ){
-        if (factor.getParents().size()==0) {
-            return factor;
-        }
         CPT newFactor=new CPT();
         ArrayList<BayesianNode> newParents=new ArrayList<>();
         BayesianNode node,hiddenNode;
@@ -161,11 +169,13 @@ public class VariableElimination {
         }
         //update table of new factor
         for (int i=0;i<newTableSize;i++){
+            //find the index of the hidden.
             if(isName){
                 indexOfHidden=iterator.size()-1;
             }else{
                 indexOfHidden=factor.getParents().indexOf(hiddenNode);
             }
+            //add together all probabilities of hidden var for each combo of the factor without it.
             for(int j=0;j<hiddenNode.getVars().size();j++){
                 iterator.set(indexOfHidden,j+1);
                 prob+=factor.getProb(iterator);
@@ -192,10 +202,10 @@ public class VariableElimination {
         CPT newFactor=new CPT();
         ArrayList<BayesianNode> newParents=new ArrayList<>();
         boolean nameIsFirstFac = false;
-        //choose the query that isn't our hidden to be the name unless they're both the hidden
+        //if factor 2 has a different name than query than make name be from factor2 otherwise make name from factor1
         if(!factor2.getName().contains(hiddenName)){
             newFactor.setName(factor2.getName());
-        }else{
+        }else {
             newFactor.setName(factor1.getName());
             nameIsFirstFac=true;
         }
@@ -205,7 +215,7 @@ public class VariableElimination {
         for (BayesianNode p: factor1.getParents()) {
             newParents.add(p);
         }
-        //TODO helpp
+        //TODO h
         if(!nameIsFirstFac){
             newParents.add(this.network.getBN().get(factor1.getName()));
         }
@@ -216,6 +226,7 @@ public class VariableElimination {
             newParents.add(parent);
         }
         newFactor.setParents(newParents);
+        //TODO bbb
         //factor multiplying for the new table
         ArrayList<Double>table=timesFactorTable(factor1,factor2,arr,nameIsFirstFac,newFactor);
         //now add it to the new factor
@@ -224,15 +235,38 @@ public class VariableElimination {
     }
     public CPT join(ArrayList<CPT> _factors,double[] arr,String hiddenName){
         CPT factor1,factor2,newFactor;
+        String query=this.query.split("=")[0];
+        System.out.println(hiddenName+" is the hidden");
+        //join all factors in that contain hidden
         while (_factors.size()>1){
+            //remove the two first factors and join them
             factor1=_factors.remove(0);
+            System.out.print("f1: "+factor1.getFactorParams()+" ");
+            System.out.println(factor1.getTable());
             factor2=_factors.remove(0);
+            System.out.print("f2: "+factor2.getFactorParams()+" ");
+            System.out.println(factor2.getTable());
             newFactor=timesFactor(factor1,factor2,arr,hiddenName);
+            System.out.print("new: "+newFactor.getFactorParams()+" ");
+            System.out.println(newFactor.getTable());
             _factors.add(newFactor);
-            System.out.println(newFactor);
+            //sort factors
             sortBy1(_factors);
         }
-        newFactor=eliminateHidden(_factors.get(0),hiddenName,arr);
+        newFactor=_factors.get(0);
+        //if the factor is the query, and it has only its variables than it's after the final join
+        if((newFactor.getName().contains(query))&&(newFactor.getFactorSize()<=newFactor.getVars().size())){
+            return newFactor;
+        }
+        if(newFactor.getFactorSize()<=newFactor.getVars().size()){
+            newFactor.getTable().remove(0);
+            return newFactor;
+        }
+        //eliminate the hidden
+        newFactor=eliminateHidden(newFactor,hiddenName,arr);
+        System.out.println("after elimination "+newFactor.getFactorParams()+" ");
+        System.out.println(newFactor.getTable());
+
         return newFactor;
     }
     public ArrayList<String> sortHidden(ArrayList<String> hidden){
@@ -257,10 +291,13 @@ public class VariableElimination {
         double sumOfFinal=0;
         CPT afterJoin,finalFactor;
         ArrayList<CPT> hiddenFactors;
+        //remove all leafs from the graph until you're left only with ancestors
         removeLeafs();
         this.hidden = getHidden();
+        //update your factors by evidence
         updateFactorsByEvidence();
         sortHidden(this.hidden);
+        //go over all hidden variables
         while(!this.hidden.isEmpty()){
             hiddenFactors=new ArrayList<>();
             hiddenName=this.hidden.remove(0);
@@ -316,7 +353,7 @@ public class VariableElimination {
                 if (indexes.get(indexes.size() - 1) == value) {
                     arr.add(factor.getProb(indexes));
                 }
-                indexes = iterate(indexes, factor);//TODO finish is the node
+                indexes = iterate(indexes, factor);
 
             }
         } else {
@@ -355,7 +392,6 @@ public class VariableElimination {
                     remove.add(var);
                 }
             }
-//            finished=true;//TODO why problem
             if (remove.size() == 0) {
                 finished = true;
             }
