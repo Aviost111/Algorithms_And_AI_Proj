@@ -100,6 +100,10 @@ public class VariableElimination {
             //get iterator for factor 1 to know where to take the probability from
             for(int j=0;j<factor1.getParents().size();j++){
 //                iterationFac1.add(iterationNewF.get(j));
+                if(factor1.getParents().get(j).getName().contains(newF.getName())){
+                    iterationFac1.add(iterationNewF.get(iterationNewF.size()-1));
+                    continue;
+                }
                 indexForFact1=newF.getParents().indexOf(factor1.getParents().get(j));//gets the index for where parent at
                 // index j in old the factor is in the iterator of the new factor
                 iterationFac1.add(iterationNewF.get(indexForFact1));
@@ -114,6 +118,10 @@ public class VariableElimination {
             }
             //now for factor2
             for(int j=0;j<factor2.getParents().size();j++){
+                if(factor2.getParents().get(j).getName().contains(newF.getName())){
+                    iterationFac2.add(iterationNewF.get(iterationNewF.size()-1));
+                    continue;
+                }
                 indexForFact2=newF.getParents().indexOf(factor2.getParents().get(j));//gets the index for where parent at
                 // index j in old the factor is in the iterator of the new factor
                 iterationFac2.add(iterationNewF.get(indexForFact2));
@@ -213,6 +221,9 @@ public class VariableElimination {
         newFactor.setVars(this.network.getBN().get(newFactor.getName()).getVars());
         //update parents
         for (BayesianNode p: factor1.getParents()) {
+            if(p.getName().contains(newFactor.getName())){
+                continue;
+            }
             newParents.add(p);
         }
         //TODO h
@@ -235,6 +246,8 @@ public class VariableElimination {
     }
     public CPT join(ArrayList<CPT> _factors,double[] arr,String hiddenName){
         CPT factor1,factor2,newFactor;
+        //TODO remove array
+        ArrayList<Integer> iter=new ArrayList<>(),iterCopy=new ArrayList<>();
         String query=this.query.split("=")[0];
         System.out.println(hiddenName+" is the hidden");
         //join all factors in that contain hidden
@@ -317,7 +330,7 @@ public class VariableElimination {
             }
             sortBy1(hiddenFactors);
             afterJoin=join(hiddenFactors,arr,hiddenName);
-            if(afterJoin.getFactorSize()<2){
+            if(afterJoin.getFactorSize()<afterJoin.getVars().size()){
                 continue;
             }
             this.factors.add(afterJoin);
