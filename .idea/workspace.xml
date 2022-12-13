@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="fixed 2 more">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BayesianNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNetwork.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ReadXMLFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ReadXMLFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/temp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/temp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670867185698</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="fixed 2 more">
+      <created>1670938204845</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1670938204845</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

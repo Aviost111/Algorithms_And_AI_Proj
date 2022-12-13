@@ -73,7 +73,7 @@ public class VariableElimination {
                     String temp = arr.get(j);
                     arr.set(j,arr.get(j+1));
                     arr.set(j+1,temp);
-                    }
+                }
             }
         }
     }
