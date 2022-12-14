@@ -7,13 +7,6 @@ public class BayesianNode {
     private ArrayList<BayesianNode> parents = new ArrayList<>();
     private ArrayList<BayesianNode> children = new ArrayList<>();
 
-    public BayesianNode(String name, ArrayList<String> vars, CPT cpt, ArrayList<BayesianNode> parents, ArrayList<BayesianNode> children) {
-        this.name = name;
-        this.vars = vars;
-        this.cpt = cpt;
-        this.parents = parents;
-        this.children = children;
-    }
 
     public BayesianNode(String name, ArrayList<String> vars) {
         this.name = name;
@@ -26,20 +19,12 @@ public class BayesianNode {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ArrayList<String> getVars() {
         return vars;
     }
 
     public void setCptName() {
         this.cpt.setName(this.name);
-    }
-
-    public void setVars(ArrayList<String> vars) {
-        this.vars = vars;
     }
 
     public CPT getCpt() {
@@ -62,20 +47,12 @@ public class BayesianNode {
         return parents;
     }
 
-    public void setParents(ArrayList<BayesianNode> parents) {
-        this.parents = parents;
-    }
-
     public void addParent(BayesianNode parent) {
         this.parents.add(parent);
     }
 
     public ArrayList<BayesianNode> getChildren() {
         return children;
-    }
-
-    public void setChildren(ArrayList<BayesianNode> children) {
-        this.children = children;
     }
 
     public void addChild(BayesianNode child) {

@@ -42,7 +42,7 @@ public class BayesianNetwork {
             evidence[w] = arr2[i];
             w++;
         }
-        boolean isAFactor = false;
+        boolean isAFactor;
         isAFactor = inACpt(query, evidence);
         if (isAFactor) {
             ArrayList<Integer> ans = new ArrayList<>();
@@ -127,29 +127,13 @@ public class BayesianNetwork {
         double ans = numerator / denominator;
         ans = Math.round(ans * 100000) / 100000.0d;
         arr[0] = times;
-        arr[1] = times;
+        arr[1] = adds;
         arr[2] = ans;
         System.out.println(String.format("%.5f", arr[2]) + "," + (int) arr[0] + "," + (int) arr[1]);
     }
 
-//    public ArrayList<CPT> getFactors() {
-//        return factors;
-//    }
-//
-//    public void setFactors() {
-//        this.factors =new ArrayList<>();
-//        Set<String> setKeys= BN.keySet();
-//        for (String key:setKeys) {
-//            this.factors.add(BN.get(key).getCpt().copy());
-//        }
-//    }
-
     public Hashtable<String, BayesianNode> getBN() {
         return BN;
-    }
-
-    public void setBN(Hashtable<String, BayesianNode> BN) {
-        this.BN = BN;
     }
 
     @Override
