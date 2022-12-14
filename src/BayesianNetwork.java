@@ -9,72 +9,18 @@ public class BayesianNetwork {
     public boolean inACpt(String query, String[] evidence) {
         ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
         BayesianNode node;
-        if(parents.size()!=evidence.length){
+        if (parents.size() != evidence.length) {
             return false;
         }
-        for(int i=0;i<parents.size();i++){
-            node=this.BN.get(evidence[i]);
-            if(!parents.contains(node)){
+        for (int i = 0; i < parents.size(); i++) {
+            node = this.BN.get(evidence[i]);
+            if (!parents.contains(node)) {
                 return false;
             }
         }
         return true;
     }
-    //TODO erase
-    public ArrayList<Integer> iterate(ArrayList<Integer> arr, CPT factor) {
-        for (int i = arr.size() - 1; i >= 0; i--) {
-            arr.set(i, arr.get(i) + 1);
-            if ((i == arr.size() - 1) && (arr.get(i) < factor.getVars().size() + 1)) {
-                break;
-            }
-            if ((i != arr.size() - 1) && (arr.get(i) < factor.getParents().get(i).getVars().size() + 1)) {
-                break;
-            }
-            arr.set(i, 1);
-        }
-        return arr;
-    }
-    public ArrayList<Double> updateProbTable(String name, int value, CPT factor, Boolean isNode) {
-        ArrayList<Double> arr = new ArrayList<>();
-        ArrayList<Integer> indexes = new ArrayList<>();
-        int size;
-        for (int i = 0; i < factor.getParents().size() + 1; i++) {//makes indexes
-            indexes.add(1);
-        }
-        if (isNode) {
-            size=factor.getFactorSize();
-            for (int i = 0; i < size; i++) {
-                if (indexes.get(indexes.size() - 1) == value) {
-                    arr.add(factor.getProb(indexes));
-                }
-                indexes = iterate(indexes, factor);
 
-            }
-        } else {
-            size= factor.getFactorSize();
-            for (int i = 0; i < size; i++) {
-                if (indexes.get(factor.getParentIndex(name)) == value) {
-                    arr.add(factor.getProb(indexes));
-                }
-                indexes = iterate(indexes, factor);
-            }
-
-        }
-        return arr;
-    }
-    public void remove(String key){
-        BayesianNode node=this.BN.get(key);
-        for (BayesianNode parent:node.getParents()) {
-            parent.getChildren().remove(node);
-        }
-        for (BayesianNode child:node.getChildren()) {
-            child.getCpt().setTable(updateProbTable(key,1,child.getCpt(),false));
-            child.getCpt().getParents().remove(node);
-            child.getParents().remove(node);
-        }
-        this.BN.remove(key);
-    }
-    //TODO erase
 
     public BayesianNetwork(Hashtable<String, BayesianNode> BN) {
         this.BN = BN;
@@ -88,23 +34,26 @@ public class BayesianNetwork {
     public void function1(String input) {
         double[] arr = new double[3];
         String[] arr2 = input.split("[()]")[1].split("[,|=]");
-        String query=arr2[0];
+        String query = arr2[0];
         //get names of evidence
-        int w=0;
-        String[] evidence=new String[(arr2.length-2)/2];
-        for(int i=2;i<arr2.length;i=i+2){
-            evidence[w]=arr2[i];
+        int w = 0;
+        String[] evidence = new String[(arr2.length - 2) / 2];
+        for (int i = 2; i < arr2.length; i = i + 2) {
+            evidence[w] = arr2[i];
             w++;
         }
-        boolean isAFactor=false;
-        isAFactor=inACpt(query,evidence);
-//        if(isAFactor){
-//            ArrayList<Integer> ans=new ArrayList<>();
-//            for(int i=2;i<arr2.length;i=i+2){
-//
-//            }
-//            arr[0]=this.getBN().get(arr2[0]).getCpt().getProb()
-//        }
+        boolean isAFactor = false;
+        isAFactor = inACpt(query, evidence);
+        if (isAFactor) {
+            ArrayList<Integer> ans = new ArrayList<>();
+            for (int i = 2; i < arr2.length - 1; i = i + 2) {
+                ans.add(valueToNumber(arr2[i], arr2[i + 1]));
+            }
+            ans.add(valueToNumber(arr2[0], arr2[1]));
+            arr[0] = this.getBN().get(arr2[0]).getCpt().getProb(ans);
+            System.out.println(arr[0] + " ," + arr[1] + " " + arr[2] + " ");
+            return;
+        }
         double numerator = 0, subSum = 1, denominator = 0;
         int times = 0, adds = 0;
         ArrayList<String> keys = new ArrayList<>();
@@ -152,6 +101,12 @@ public class BayesianNetwork {
             } else {//changes to denominator
                 denominator += subSum;
             }
+//            ArrayList<Integer> ans=new ArrayList<>();
+//            for(int i=2;i<arr2.length;i=i+2){
+//
+//            }
+//            arr[0]=this.getBN().get(arr2[0]).getCpt().getProb()
+//        }
             adds++;
             subSum = 1;
             //need to add to the last index to iterate
