@@ -293,12 +293,12 @@ public class VariableElimination {
         //array containing: multiplication,addition and final answer
         double[] arr = new double[3];
         String[] wanted = this.query.split("="), e = new String[evidence.size()];
-        String[] arr2 = new String[evidence.size()*2],query = this.query.split("=");;
+        String[] arr2 = new String[evidence.size()*2],query = this.query.split("=");
         String hiddenName;
         double sumOfFinal = 0;
         CPT afterJoin, finalFactor;
         ArrayList<CPT> hiddenFactors;
-        boolean inCpt = false;
+        boolean inCpt;
         //create an array of evidence names to check if the query that was given is in a cpt already.
         for (int i = 0; i < e.length; i++) {
             e[i] = this.evidence.get(i).split("=")[0];
@@ -343,9 +343,7 @@ public class VariableElimination {
             }
             //remove the factors from the original factor list
             for (CPT fact : hiddenFactors) {
-                if (this.factors.contains(fact)) {
-                    this.factors.remove(fact);
-                }
+                this.factors.remove(fact);
             }
             //if it's a factor that was removed previously (most likely because it wasn't an ancestor)
             //move on to the next one
@@ -417,19 +415,18 @@ public class VariableElimination {
     }
     //removes all non ancestors
     public void removeLeafs() {
-        ArrayList<String> remove = new ArrayList<>();
-        int size = this.network.getBN().size();
+        ArrayList<String> remove;
         Set<String> setKeys = this.network.getBN().keySet();
         String query = this.query.split("=")[0];
-        boolean inEvidence = false, finished = false;
+        boolean inEvidence, finished = false;
         BayesianNode node;
         //every iteration removes all leafs until an iteration that it doesn't remove anymore
         while (!finished) {
             remove = new ArrayList<>();
             for (String var : setKeys) {
                 inEvidence = false;
-                for (int j = 0; j < this.evidence.size(); j++) {
-                    if (this.evidence.get(j).contains(var)) {
+                for (String s : this.evidence) {
+                    if (s.contains(var)) {
                         inEvidence = true;
                         break;
                     }
@@ -510,37 +507,5 @@ public class VariableElimination {
                 }
             }
         }
-    }
-
-    public BayesianNetwork getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(BayesianNetwork network) {
-        this.network = network;
-    }
-
-    public ArrayList<CPT> getFactors() {
-        return factors;
-    }
-
-    public void setFactors(ArrayList<CPT> factors) {
-        this.factors = factors;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    public ArrayList<String> getEvidence() {
-        return evidence;
-    }
-
-    public void setEvidence(ArrayList<String> evidence) {
-        this.evidence = evidence;
     }
 }
