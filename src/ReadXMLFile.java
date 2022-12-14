@@ -74,7 +74,7 @@ public class ReadXMLFile {
         String filename2="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename2));
         ArrayList<String> evidence=new ArrayList<>();
-        evidence.add("A1=T");
+        evidence.add("A1=F");
 //        evidence.add("B2=F");
 //        evidence.add("C3=F");
         VariableElimination ve = new VariableElimination(BN, "B0=v1", evidence);
@@ -91,7 +91,7 @@ public class ReadXMLFile {
 //        TODO add switch for each function
 
 //        BN.function1("P(B0=v3|C3=T,B2=F,C2=v3),1)");
-        BN.function1("P(B0=v1|A1=T),1)");
+        BN.function1("P(B0=v1|A1=F),1)");
 //        filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
 //        BayesianNetwork BnBig =new BayesianNetwork(makeNetwork(filename));
         //off by a little

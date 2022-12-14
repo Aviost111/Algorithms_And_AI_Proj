@@ -21,7 +21,7 @@ public class VariableElimination {
     public ArrayList<String> getHidden() {
         Set<String> setKeys = network.getBN().keySet();
         ArrayList<String> hiddenVars = new ArrayList<>();
-        boolean contains = false;
+        boolean contains;
         for (String key : setKeys) {
             contains = false;
             for (String ev : this.evidence) {
@@ -41,7 +41,7 @@ public class VariableElimination {
     //gets an array reflecting a combination (for example A=T,B=T,C=F) and updates it to the next combination
     // without changing the hidden variable in index "hidden"
     // in this case if B is hidden A=F,B=T,C=T
-    public ArrayList<Integer> iterate(ArrayList<Integer> arr, CPT factor, int hidden) {
+    public void iterate(ArrayList<Integer> arr, CPT factor, int hidden) {
         for (int i = arr.size() - 1; i >= 0; i--) {
             if (i == hidden) {
                 continue;
@@ -55,7 +55,6 @@ public class VariableElimination {
             }
             arr.set(i, 1);
         }
-        return arr;
     }
 
     //gets an array reflecting a combination (for example A=T,B=T,C=F) and updates it to the next combination
@@ -73,26 +72,12 @@ public class VariableElimination {
         }
         return arr;
     }
-
-    public void sortByAscii(ArrayList<String> arr) {
-        int n = arr.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (toAscii(arr.get(j)) > toAscii(arr.get(j + 1))) {
-                    // swap arr[j+1] and arr[j]
-                    String temp = arr.get(j);
-                    arr.set(j, arr.get(j + 1));
-                    arr.set(j + 1, temp);
-                }
-            }
-        }
-    }
     //computes and returns the table for the new factor
     public ArrayList<Double> timesFactorTable(CPT factor1, CPT factor2, double[] arr, boolean nameFromFac1, CPT newF) {
         ArrayList<Double> table = new ArrayList<>();
         ArrayList<Integer> iterationNewF = new ArrayList<>(), iterationFac1, iterationFac2;
         double probOfTimes;
-        int indexForFact2, count = 0, indexForFact1;
+        int indexForFact2, indexForFact1;
         //create iteration for new factor
         for (int i = 0; i < newF.getParents().size() + 1; i++) {
             iterationNewF.add(1);
@@ -105,7 +90,6 @@ public class VariableElimination {
         sizeOfNew *= this.network.getBN().get(newF.getName()).getVars().size();
         //make table by multiplying factor 1 and factor 2
         for (int i = 0; i < sizeOfNew; i++) {
-            count++;
             iterationFac1 = new ArrayList<>();
             iterationFac2 = new ArrayList<>();
             //get iterator for factor 1 to know where to take the probability from
@@ -155,7 +139,6 @@ public class VariableElimination {
     //eliminates the hidden
     public CPT eliminateHidden(CPT factor, String hiddenName, double[] arr) {
         CPT newFactor = new CPT();
-        ArrayList<BayesianNode> newParents = new ArrayList<>();
         BayesianNode node, hiddenNode;
         hiddenNode = network.getBN().get(hiddenName);
         double prob = 0;
@@ -277,7 +260,7 @@ public class VariableElimination {
         if ((newFactor.getName().contains(query)) && (newFactor.getFactorSize() <= newFactor.getVars().size())) {
             return newFactor;
         }
-        //if it's a factor that will become a one variable and isn't query,dont do elimination
+        //if it's a factor that will become a one variable and isn't query,don't do elimination
         //we'll throw it out soon
         if (newFactor.getFactorSize() <= newFactor.getVars().size()) {
             newFactor.getTable().remove(0);
@@ -290,12 +273,11 @@ public class VariableElimination {
     }
 
     //sorts hidden factors by ABC with advanced bubble sort
-    public ArrayList<String> sortHidden(ArrayList<String> hidden) {
+    public void sortHidden(ArrayList<String> hidden) {
         int size = hidden.get(0).length(), n = hidden.size();
         for (int k = size - 1; k >= 0; k--) {
             for (int i = 0; i < n - 1; i++) {
                 for (int j = 0; j < n - i - 1; j++) {
-                    hidden.get(j).charAt(k);
                     if (Character.toUpperCase(hidden.get(j).charAt(k)) > Character.toUpperCase(hidden.get(j + 1).charAt(k))) {
                         // swap arr[j+1] and arr[j]
                         String temp = hidden.get(j);
@@ -305,14 +287,13 @@ public class VariableElimination {
                 }
             }
         }
-        return hidden;
     }
 
     public void function2() {
         //array containing: multiplication,addition and final answer
         double[] arr = new double[3];
         String[] wanted = this.query.split("="), e = new String[evidence.size()];
-        String[] arr2 = new String[evidence.size()];
+        String[] arr2 = new String[evidence.size()*2],query = this.query.split("=");;
         String hiddenName;
         double sumOfFinal = 0;
         CPT afterJoin, finalFactor;
@@ -322,6 +303,13 @@ public class VariableElimination {
         for (int i = 0; i < e.length; i++) {
             e[i] = this.evidence.get(i).split("=")[0];
         }
+        //creates array of evidence with name and value
+        int w=0;
+        for (int i = 0; i < arr2.length; i=i+2) {
+            arr2[i]=this.evidence.get(w).split("=")[0];
+            arr2[i+1]=this.evidence.get(w).split("=")[1];
+            w++;
+        }
         //check if the query that was given is in a cpt already.
         inCpt = this.network.inACpt(wanted[0], e);
         //if it is get the probability
@@ -330,7 +318,6 @@ public class VariableElimination {
             for (int i = 0; i < arr2.length - 1; i = i + 2) {
                 ans.add(this.network.valueToNumber(arr2[i], arr2[i + 1]));
             }
-            String[] query = this.query.split("=");
             ans.add(this.network.valueToNumber(query[0], query[1]));
             arr[0] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
             System.out.println(arr[0] + " ," + arr[1] + " " + arr[2] + " ");
