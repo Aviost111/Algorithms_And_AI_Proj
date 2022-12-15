@@ -4,23 +4,43 @@ import java.util.Set;
 
 public class BayesianNetwork {
     private Hashtable<String, BayesianNode> BN;
-//    private ArrayList<CPT> factors;
+    private ArrayList<CPT> factors;
 
     public boolean inACpt(String query, String[] evidence) {
         ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
+        int count=0;
         BayesianNode node;
-        if (parents.size() != evidence.length) {
+        if (parents.size() > evidence.length) {
             return false;
         }
-        for (int i = 0; i < parents.size(); i++) {
+        for (int i = 0; i < evidence.length; i++) {
             node = this.BN.get(evidence[i]);
-            if (!parents.contains(node)) {
-                return false;
+            if (parents.contains(node)) {
+                count++;
             }
         }
-        return true;
+        if(count== parents.size()) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
+//    public boolean inACpt(String query, String[] evidence) {
+//        ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
+//        int count = 0;
+//        BayesianNode node;
+//        if (parents.size() != evidence.length) {
+//            return false;
+//        }
+//        for (int i = 0; i < evidence.length; i++) {
+//            node = this.BN.get(evidence[i]);
+//            if (!parents.contains(node)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     public BayesianNetwork(Hashtable<String, BayesianNode> BN) {
         this.BN = BN;
@@ -46,12 +66,18 @@ public class BayesianNetwork {
         isAFactor = inACpt(query, evidence);
         if (isAFactor) {
             ArrayList<Integer> ans = new ArrayList<>();
-            for (int i = 2; i < arr2.length - 1; i = i + 2) {
-                ans.add(valueToNumber(arr2[i], arr2[i + 1]));
+            BayesianNode queryNode=this.BN.get(query);
+            for (int i = 0; i < queryNode.getParents().size(); i++) {
+                for (int j = 2; j < arr2.length-1; j++) {
+                    if(arr2[j].contains(queryNode.getParents().get(i).getName())){
+                        ans.add(valueToNumber(arr2[j], arr2[j + 1]));
+                    }
+                }
             }
             ans.add(valueToNumber(arr2[0], arr2[1]));
-            arr[0] = this.getBN().get(arr2[0]).getCpt().getProb(ans);
-            System.out.println(arr[0] + " ," + arr[1] + " " + arr[2] + " ");
+            arr[2] = this.getBN().get(arr2[0]).getCpt().getProb(ans);
+            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
+            //TODO wrong output from inCpt
             return;
         }
 

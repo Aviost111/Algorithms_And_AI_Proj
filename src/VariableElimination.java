@@ -17,6 +17,9 @@ public class VariableElimination {
         this.hidden = getHidden();
     }
 
+    public int valueToNumber(String name, String value) {
+        return this.network.getBN().get(name).getVars().indexOf(value) + 1;
+    }
     //finds all hidden variables in network
     public ArrayList<String> getHidden() {
         Set<String> setKeys = network.getBN().keySet();
@@ -314,12 +317,17 @@ public class VariableElimination {
         //if it is get the probability
         if (inCpt) {
             ArrayList<Integer> ans = new ArrayList<>();
-            for (int i = 0; i < arr2.length - 1; i = i + 2) {
-                ans.add(this.network.valueToNumber(arr2[i], arr2[i + 1]));
+            BayesianNode queryNode=this.network.getBN().get(query[0]);
+            for (int i = 0; i < queryNode.getParents().size(); i++) {
+                for (int j = 0; j < arr2.length-1; j++) {
+                    if(arr2[j].contains(queryNode.getParents().get(i).getName())){
+                        ans.add(valueToNumber(arr2[j], arr2[j + 1]));
+                    }
+                }
             }
             ans.add(this.network.valueToNumber(query[0], query[1]));
-            arr[0] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
-            System.out.println(arr[0] + " ," + arr[1] + " " + arr[2] + " ");
+            arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
+            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
             return;
         }
         //remove all leafs from the graph until you're left only with ancestors
@@ -359,6 +367,103 @@ public class VariableElimination {
             }
             //add the factor back to lists of factors
             this.factors.add(afterJoin);
+        }
+        sortBy1(this.factors);
+        //do the final join with query
+        finalFactor = join(this.factors, arr, this.factors.get(0).getName());
+        //find sum of variables to normalize.
+        for (int i = 0; i < finalFactor.getFactorSize(); i++) {
+            sumOfFinal += finalFactor.getTable().get(i);
+            //add to addition
+            arr[1] += 1;
+        }
+        //subtract from addition because we started from sumOfFinal=0
+        arr[1] -= 1;
+        //normalize
+        for (int i = 0; i < finalFactor.getFactorSize(); i++) {
+            finalFactor.getTable().set(i, (finalFactor.getTable().get(i)) / sumOfFinal);
+        }
+        //put results int array
+        arr[2] = finalFactor.getTable().get(this.network.valueToNumber(wanted[0], wanted[1]) - 1);
+        arr[2] = Math.round(arr[2] * 100000) / 100000.0d;
+        System.out.println(String.format("%.5f", arr[2]) + "," + (int) arr[1] + "," + (int) arr[0]);
+    }
+    public void function3(double[] arr) {
+        //array containing: multiplication,addition and final answer
+        String[] wanted = this.query.split("="), e = new String[evidence.size()];
+        String[] arr2 = new String[evidence.size()*2],query = this.query.split("=");
+        String hiddenName;
+        double sumOfFinal = 0;
+        CPT afterJoin, finalFactor;
+        ArrayList<CPT> hiddenFactors;
+        boolean inCpt;
+        //create an array of evidence names to check if the query that was given is in a cpt already.
+        for (int i = 0; i < e.length; i++) {
+            e[i] = this.evidence.get(i).split("=")[0];
+        }
+        //creates array of evidence with name and value
+        int w=0;
+        for (int i = 0; i < arr2.length; i=i+2) {
+            arr2[i]=this.evidence.get(w).split("=")[0];
+            arr2[i+1]=this.evidence.get(w).split("=")[1];
+            w++;
+        }
+        //check if the query that was given is in a cpt already.
+        inCpt = this.network.inACpt(wanted[0], e);
+        //if it is get the probability
+        if (inCpt) {
+            ArrayList<Integer> ans = new ArrayList<>();
+            BayesianNode queryNode=this.network.getBN().get(query[0]);
+            for (int i = 0; i < queryNode.getParents().size(); i++) {
+                for (int j = 0; j < arr2.length-1; j++) {
+                    if(arr2[j].contains(queryNode.getParents().get(i).getName())){
+                        ans.add(valueToNumber(arr2[j], arr2[j + 1]));
+                    }
+                }
+            }
+            ans.add(this.network.valueToNumber(query[0], query[1]));
+            arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
+            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
+            return;
+        }
+        //remove all leafs from the graph until you're left only with ancestors
+        removeLeafs();
+        this.hidden = getHidden();
+        //update your factors by evidence
+        updateFactorsByEvidence();
+        //sort the hidden variables by ABC
+        sortBy2(this.hidden);
+        //go over all hidden variables and eliminate them one by one
+        while (!this.hidden.isEmpty()) {
+            hiddenFactors = new ArrayList<>();
+            hiddenName = this.hidden.remove(0);
+            //add all factors containing the hidden variable into an array
+            for (CPT fact : this.factors) {
+                if (fact.getFactorParams().contains(hiddenName)) {
+                    hiddenFactors.add(fact);
+
+                }
+            }
+            //remove the factors from the original factor list
+            for (CPT fact : hiddenFactors) {
+                this.factors.remove(fact);
+            }
+            //if it's a factor that was removed previously (most likely because it wasn't an ancestor)
+            //move on to the next one
+            if (hiddenFactors.size() == 0) {
+                continue;
+            }
+            //sort factors by size and ascii
+            sortBy1(hiddenFactors);
+            //join the factors
+            afterJoin = join(hiddenFactors, arr, hiddenName);
+            //if factor after join is the size of 1 remove it
+            if (afterJoin.getFactorSize() < afterJoin.getVars().size()) {
+                continue;
+            }
+            //add the factor back to lists of factors
+            this.factors.add(afterJoin);
+            sortBy2(this.hidden);
         }
         sortBy1(this.factors);
         //do the final join with query
@@ -493,6 +598,49 @@ public class VariableElimination {
         }
     }
 
+    public boolean big2(String firstName,String secondName){
+        ArrayList<CPT> first=new ArrayList<>(),second=new ArrayList<>();
+        String firstVars="",secondVars="";
+        int firstCount=0,secondCount=0;
+        for (CPT factor:this.factors) {
+            if(factor.getFactorParams().contains(firstName)){
+                first.add(factor);
+                if(!firstVars.contains(factor.getName())){
+                    firstVars+= factor.getName();
+                    firstCount++;
+                }
+                for (BayesianNode parent:factor.getParents()) {
+                    if(!firstVars.contains(parent.getName())) {
+                        firstVars += parent.getName();
+                        firstCount++;
+                    }
+                }
+            }
+            if(factor.getFactorParams().contains(secondName)){
+                second.add(factor);
+                if(!secondVars.contains(factor.getName())){
+                    secondVars+= factor.getName();
+                    secondCount++;
+                }
+                for (BayesianNode parent:factor.getParents()) {
+                    if(!secondVars.contains(parent.getName())) {
+                        secondVars += parent.getName();
+                        secondCount++;
+                    }
+                }
+            }
+        }
+        if (firstCount>secondCount){
+            return true;
+        } else if (firstCount<secondCount) {
+            return false;
+        } else if (first.size()<second.size()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     //sorts by size and ascii
     public void sortBy1(ArrayList<CPT> arr) {
         int n = arr.size();
@@ -501,6 +649,19 @@ public class VariableElimination {
                 if (arr.get(j).big1(arr.get(j + 1))) {
                     // swap arr[j+1] and arr[j]
                     CPT temp = arr.get(j);
+                    arr.set(j, arr.get(j + 1));
+                    arr.set(j + 1, temp);
+                }
+            }
+        }
+    }
+    public void sortBy2(ArrayList<String> arr){
+        int n = arr.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (big2(arr.get(j),arr.get(j+1))) {
+                    // swap arr[j+1] and arr[j]
+                    String temp = arr.get(j);
                     arr.set(j, arr.get(j + 1));
                     arr.set(j + 1, temp);
                 }

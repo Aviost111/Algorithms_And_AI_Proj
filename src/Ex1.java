@@ -91,7 +91,7 @@ public class Ex1 {
 //            throw new RuntimeException(e);
 //        }
         try {
-            String input="input.txt";
+            String input="input2.txt";
             ArrayList<String> evidence;
             URL file = Ex1.class.getResource(input);
             assert file != null;
@@ -118,6 +118,14 @@ public class Ex1 {
                 }
                 switch (functionType){
                     case 1:
+                        ArrayList<Integer> arr=new ArrayList<>();
+                        arr.add(2);
+                        arr.add(2);
+                        arr.add(2);
+                        arr.add(1);
+                        arr.add(2);
+                        arr.add(2);
+                        System.out.println(BN.getBN().get("C1").getCpt().getProb(arr));
                         BN.function1(line,ans);
                         finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
                         fw.write(finalAns);
@@ -131,9 +139,8 @@ public class Ex1 {
                         break;
                     case 3:
                         ve = new VariableElimination(BN, query, evidence);
-                        ve.function2(ans);
+                        ve.function3(ans);
                         finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
-                        System.out.println("do case 3");
                         BN =new BayesianNetwork(makeNetwork(net));
                         fw.write(finalAns);
                         break;
@@ -145,28 +152,5 @@ public class Ex1 {
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
-//        try {
-//            int arr[]=new int[3];
-//            arr[0]=5;
-//            arr[1]=3;
-//            arr[2]=6;
-//            String str=arr[0]+","+arr[1]+","+arr[2]+"";
-////            URL out = Ex1.class.getResource("output.txt");
-//            FileWriter fw = new FileWriter(new File("src", "output.txt"));
-//            fw.write("hello world\n");
-//            fw.write(str);
-//            fw.close();
-//            PrintWriter outs = new PrintWriter(fw);
-//            outs.println(str);
-//            System.out.println("Successfully wrote to the file.");
-//        } catch (IOException e) {
-//            System.out.println("An error occurred.");
-//            e.printStackTrace();
-//
-//        }
-//        TODO round 5th digit for function 2 and 3
-
-
-
     }
 }
