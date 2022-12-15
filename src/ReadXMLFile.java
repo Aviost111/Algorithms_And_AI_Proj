@@ -1,5 +1,12 @@
+import jdk.jfr.internal.tool.Main;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ReadXMLFile {
@@ -70,8 +77,27 @@ public class ReadXMLFile {
 
     //P(B=T|J=T,M=T)
     public static void main(String []argv) {
-        String filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/alarm_net.xml";
-        String filename2="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
+//
+
+        try {
+            String input="input.txt";
+            File file=new File(input);
+            Scanner sc= new Scanner(file);
+            while(sc.hasNextLine()){
+                String b=sc.nextLine();
+                System.out.println(b);
+                sc.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String filename="alarm_net.xml";
+        String filename2="big_net.xml";
+        String input="input.txt";
+
+
         BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
         ArrayList<String> evidence=new ArrayList<>();
         evidence.add("B=T");
@@ -80,12 +106,6 @@ public class ReadXMLFile {
         VariableElimination ve = new VariableElimination(BN, "J=T", evidence);
         ve.function2();
         BN =new BayesianNetwork(makeNetwork(filename));
-//        System.out.println(ve.getFactors());
-//        ve.updateFactorsByEvidence();
-//        System.out.println(ve.getFactors());
-//        BN=new BayesianNetwork(makeNetwork(filename));
-//        BN.setFactors();
-//        System.out.println(BN.getFactors());
 //        TODO round 5th digit for funct 2 and 3
 //        TODO add switch for each function
 
@@ -107,26 +127,6 @@ public class ReadXMLFile {
 //        Scanner scr = new Scanner(t),sc;
 //        v=scr.nextLine();
 //        v=scr.nextLine();
-//        String []arr=v.split("[()]")[1].split("[,|]");
-//        String []arr2=v.split("[()]")[1].split("[,|=]");
-//        System.out.println(Arrays.toString(arr2));
-//        Hashtable<String, BayesianNode> Bay=BN.getBN();
-//        ArrayList<Integer> arrI=new ArrayList<Integer>();
-//        arrI.add(1);
-//        arrI.add(1);
-//        arrI.add(1);
-//        System.out.println(Bay.get("A").getCpt().getProb(arrI));
-
-        //v=v.split(",")[v.split(",").length-1];
-//        System.out.println(Arrays.toString(arr));
-//        System.out.println(v);
-//        System.out.println(Arrays.toString(arr));
-//        while (scr.hasNextLine()){
-//            String []arr=v.split("[,|()]");
-//            System.out.println(Arrays.toString(arr));
-//            v=scr.nextLine();
-//        }
-//        System.out.println(Arrays.toString(arr));
 
 
 

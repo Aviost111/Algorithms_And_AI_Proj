@@ -42,6 +42,7 @@ public class BayesianNetwork {
             evidence[w] = arr2[i];
             w++;
         }
+        //checks if the query we want is in a factor and if it is gets the probability
         boolean isAFactor;
         isAFactor = inACpt(query, evidence);
         if (isAFactor) {
@@ -54,6 +55,7 @@ public class BayesianNetwork {
             System.out.println(arr[0] + " ," + arr[1] + " " + arr[2] + " ");
             return;
         }
+
         double numerator = 0, subSum = 1, denominator = 0;
         int times = 0, adds = 0;
         ArrayList<String> keys = new ArrayList<>();
@@ -101,12 +103,6 @@ public class BayesianNetwork {
             } else {//changes to denominator
                 denominator += subSum;
             }
-//            ArrayList<Integer> ans=new ArrayList<>();
-//            for(int i=2;i<arr2.length;i=i+2){
-//
-//            }
-//            arr[0]=this.getBN().get(arr2[0]).getCpt().getProb()
-//        }
             adds++;
             subSum = 1;
             //need to add to the last index to iterate
