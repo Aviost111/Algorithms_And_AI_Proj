@@ -19,7 +19,6 @@ public class Ex1 {
             System.out.println("hi");
             URL file = Ex1.class.getResource(filename);
             File URI = new File(file.toURI());
-            File xml= new File(filename);
             Scanner sc = new Scanner(URI);
             String name="",data2,data,ParentName;
             ArrayList<String> arr;
@@ -97,11 +96,13 @@ public class Ex1 {
         try {
             String input="input.txt";
             URL file = Ex1.class.getResource(input);
-            File URI = new File(file.toURI());
-            FileReader fr = new FileReader(URI);
-            BufferedReader br = new BufferedReader(fr);
+            File filename = new File(file.toURI());
+            Scanner sc=new Scanner(filename);
+//            FileReader fr = new FileReader(filename);
+//            BufferedReader br = new BufferedReader(fr);
             String str;
-            str = br.readLine();
+            str = sc.nextLine();
+            System.out.println(str);
             BayesianNetwork BN =new BayesianNetwork(makeNetwork(str));
             System.out.println(str);
 
