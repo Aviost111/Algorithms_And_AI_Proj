@@ -1,12 +1,5 @@
-import jdk.jfr.internal.tool.Main;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class ReadXMLFile {
@@ -63,12 +56,9 @@ public class ReadXMLFile {
                             node.setCptVars();
                             node.setCptName();
                         }
-//                        System.out.println(data);
                     }
                 }
             }
-//            System.out.println(BN);
-//            System.out.println(BN.get("A").getCpt());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -106,7 +96,7 @@ public class ReadXMLFile {
         VariableElimination ve = new VariableElimination(BN, "J=T", evidence);
         ve.function2();
         BN =new BayesianNetwork(makeNetwork(filename));
-//        TODO round 5th digit for funct 2 and 3
+//        TODO round 5th digit for function 2 and 3
 //        TODO add switch for each function
 
 //        BN.function1("P(B0=v3|C3=T,B2=F,C2=v3),1)");
