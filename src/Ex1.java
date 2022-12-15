@@ -119,20 +119,20 @@ public class Ex1 {
                 switch (functionType){
                     case 1:
                         BN.function1(line,ans);
-                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
+                        finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
                         fw.write(finalAns);
                         break;
                     case 2:
                         ve = new VariableElimination(BN, query, evidence);
                         ve.function2(ans);
-                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
+                        finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
                         BN =new BayesianNetwork(makeNetwork(net));
                         fw.write(finalAns);
                         break;
                     case 3:
                         ve = new VariableElimination(BN, query, evidence);
                         ve.function2(ans);
-                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
+                        finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
                         System.out.println("do case 3");
                         BN =new BayesianNetwork(makeNetwork(net));
                         fw.write(finalAns);
