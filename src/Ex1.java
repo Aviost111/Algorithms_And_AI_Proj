@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class ReadXMLFile {
+public class Ex1 {
     public static String mySplit(String str){
         String[] strArr=str.split(">",2);
         String[] strArr2=strArr[1].split("<",2);
@@ -17,7 +17,7 @@ public class ReadXMLFile {
         Hashtable<String,BayesianNode>BN= new Hashtable<>();
         try {
             System.out.println("hi");
-            URL file = ReadXMLFile.class.getResource(filename);
+            URL file = Ex1.class.getResource(filename);
             File URI = new File(file.toURI());
             File xml= new File(filename);
             Scanner sc = new Scanner(URI);
@@ -96,7 +96,7 @@ public class ReadXMLFile {
 //        }
         try {
             String input="input.txt";
-            URL file = ReadXMLFile.class.getResource(input);
+            URL file = Ex1.class.getResource(input);
             File URI = new File(file.toURI());
             FileReader fr = new FileReader(URI);
             BufferedReader br = new BufferedReader(fr);
