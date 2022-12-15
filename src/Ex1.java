@@ -3,8 +3,6 @@ import jdk.jfr.internal.tool.Main;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class Ex1 {
@@ -18,6 +16,7 @@ public class Ex1 {
         try {
             System.out.println("hi");
             URL file = Ex1.class.getResource(filename);
+            assert file != null;
             File URI = new File(file.toURI());
             Scanner sc = new Scanner(URI);
             String name="",data2,data,ParentName;
@@ -69,9 +68,7 @@ public class Ex1 {
             }
 //            System.out.println(BN);
 //            System.out.println(BN.get("A").getCpt());
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (URISyntaxException e) {
+        } catch (FileNotFoundException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
         return BN;
@@ -97,9 +94,10 @@ public class Ex1 {
             String input="input.txt";
             ArrayList<String> evidence;
             URL file = Ex1.class.getResource(input);
+            assert file != null;
             File filename = new File(file.toURI());
             Scanner sc=new Scanner(filename);
-            String net,line,query;;
+            String net,line,query,finalAns;
             int functionType;
             double[] ans;
             String [] wholeLine;
@@ -107,6 +105,7 @@ public class Ex1 {
             System.out.println(net);
             BayesianNetwork BN =new BayesianNetwork(makeNetwork(net));
             VariableElimination ve;
+            FileWriter fw = new FileWriter(new File("src", "output.txt"));
             while (sc.hasNextLine()){
                 ans=new double[3];
                 line= sc.nextLine();
@@ -120,57 +119,52 @@ public class Ex1 {
                 switch (functionType){
                     case 1:
                         BN.function1(line,ans);
+                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
+                        fw.write(finalAns);
                         break;
                     case 2:
                         ve = new VariableElimination(BN, query, evidence);
                         ve.function2(ans);
+                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
                         BN =new BayesianNetwork(makeNetwork(net));
+                        fw.write(finalAns);
                         break;
                     case 3:
                         ve = new VariableElimination(BN, query, evidence);
                         ve.function2(ans);
+                        finalAns=ans[2]+","+(int)ans[0]+","+(int)ans[1]+"\n";
                         System.out.println("do case 3");
                         BN =new BayesianNetwork(makeNetwork(net));
+                        fw.write(finalAns);
                         break;
                 }
-            }
 
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+            }
+            fw.close();
+
+        } catch (URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
-
-
-//        BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
-        ArrayList<String> evidence=new ArrayList<>();
-        evidence.add("B=T");
-//        evidence.add("B2=F");
-//        evidence.add("C3=F");
-//        BN =new BayesianNetwork(makeNetwork(filename));
-//        TODO round 5th digit for funct 2 and 3
-//        TODO add switch for each function
-
-//        BN.function1("P(B0=v3|C3=T,B2=F,C2=v3),1)");
-//        BN.function1("P(J=T|B=T),1)");
-//        filename="/home/avi/IdeaProjects/Algorithms_And_AI_Proj/src/big_net.xml";
-//        BayesianNetwork BnBig =new BayesianNetwork(makeNetwork(filename));
-        //off by a little
-//        BN.function1("P(J=T|B=T),1");
-//        System.out.println(ans2);
-        //Scanner sc=new Scanner();
-//        String t="alarm_net.xml\n" +
-//                "P(B=T|J=T,M=T),1\n" +
-//                "P(B=T|J=T,M=T),2\n" +
-//                "P(B=T|J=T,M=T),3\n" +
-//                "P(J=T|B=T),1\n" +
-//                "P(J=T|B=T),2\n" +
-//                "P(J=T|B=T),3",v,w;
-//        Scanner scr = new Scanner(t),sc;
-//        v=scr.nextLine();
-//        v=scr.nextLine();
+//        try {
+//            int arr[]=new int[3];
+//            arr[0]=5;
+//            arr[1]=3;
+//            arr[2]=6;
+//            String str=arr[0]+","+arr[1]+","+arr[2]+"";
+////            URL out = Ex1.class.getResource("output.txt");
+//            FileWriter fw = new FileWriter(new File("src", "output.txt"));
+//            fw.write("hello world\n");
+//            fw.write(str);
+//            fw.close();
+//            PrintWriter outs = new PrintWriter(fw);
+//            outs.println(str);
+//            System.out.println("Successfully wrote to the file.");
+//        } catch (IOException e) {
+//            System.out.println("An error occurred.");
+//            e.printStackTrace();
+//
+//        }
+//        TODO round 5th digit for function 2 and 3
 
 
 
