@@ -31,8 +31,7 @@ public class BayesianNetwork {
         return this.BN.get(name).getVars().indexOf(value) + 1;
     }
 
-    public void function1(String input) {
-        double[] arr = new double[3];
+    public void function1(String input,double[] arr) {
         String[] arr2 = input.split("[()]")[1].split("[,|=]");
         String query = arr2[0];
         //get names of evidence

@@ -289,9 +289,8 @@ public class VariableElimination {
         }
     }
 
-    public void function2() {
+    public void function2(double[] arr) {
         //array containing: multiplication,addition and final answer
-        double[] arr = new double[3];
         String[] wanted = this.query.split("="), e = new String[evidence.size()];
         String[] arr2 = new String[evidence.size()*2],query = this.query.split("=");
         String hiddenName;

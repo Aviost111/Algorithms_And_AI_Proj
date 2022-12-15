@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="finished 2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BayesianNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNetwork.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ex1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -270,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671102140584</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="finished 2">
+      <created>1671111911703</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1671111911703</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -302,16 +311,6 @@
           <properties class="java.lang.StackOverflowError" package="java.lang" />
           <option name="timeStamp" value="13" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ReadXMLFile.java</url>
-          <line>125</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/ReadXMLFile.java</url>
-          <line>97</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Ex1.java</url>
           <line>96</line>

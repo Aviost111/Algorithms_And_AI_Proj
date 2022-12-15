@@ -95,16 +95,45 @@ public class Ex1 {
 //        }
         try {
             String input="input.txt";
+            ArrayList<String> evidence;
             URL file = Ex1.class.getResource(input);
             File filename = new File(file.toURI());
             Scanner sc=new Scanner(filename);
-//            FileReader fr = new FileReader(filename);
-//            BufferedReader br = new BufferedReader(fr);
-            String str;
-            str = sc.nextLine();
-            System.out.println(str);
-            BayesianNetwork BN =new BayesianNetwork(makeNetwork(str));
-            System.out.println(str);
+            String net,line,query;;
+            int functionType;
+            double[] ans;
+            String [] wholeLine;
+            net = sc.nextLine();
+            System.out.println(net);
+            BayesianNetwork BN =new BayesianNetwork(makeNetwork(net));
+            VariableElimination ve;
+            while (sc.hasNextLine()){
+                ans=new double[3];
+                line= sc.nextLine();
+                evidence=new ArrayList<>();
+                wholeLine=line.split("[()]")[1].split("[,|]");
+                functionType=Integer.parseInt(line.split(",")[line.split(",").length-1]);
+                query=wholeLine[0];
+                for (int i = 1; i < wholeLine.length; i++) {
+                    evidence.add(wholeLine[i]);
+                }
+                switch (functionType){
+                    case 1:
+                        BN.function1(line,ans);
+                        break;
+                    case 2:
+                        ve = new VariableElimination(BN, query, evidence);
+                        ve.function2(ans);
+                        BN =new BayesianNetwork(makeNetwork(net));
+                        break;
+                    case 3:
+                        ve = new VariableElimination(BN, query, evidence);
+                        ve.function2(ans);
+                        System.out.println("do case 3");
+                        BN =new BayesianNetwork(makeNetwork(net));
+                        break;
+                }
+            }
 
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -114,18 +143,12 @@ public class Ex1 {
             throw new RuntimeException(e);
         }
 
-        String filename="alarm_net.xml";
-        String filename2="big_net.xml";
-        String input="input.txt";
-
 
 //        BayesianNetwork BN =new BayesianNetwork(makeNetwork(filename));
         ArrayList<String> evidence=new ArrayList<>();
         evidence.add("B=T");
 //        evidence.add("B2=F");
 //        evidence.add("C3=F");
-//        VariableElimination ve = new VariableElimination(BN, "J=T", evidence);
-//        ve.function2();
 //        BN =new BayesianNetwork(makeNetwork(filename));
 //        TODO round 5th digit for funct 2 and 3
 //        TODO add switch for each function
