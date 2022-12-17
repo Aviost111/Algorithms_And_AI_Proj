@@ -327,7 +327,6 @@ public class VariableElimination {
             }
             ans.add(this.network.valueToNumber(query[0], query[1]));
             arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
-            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
             return;
         }
         //remove all leafs from the graph until you're left only with ancestors
@@ -386,7 +385,6 @@ public class VariableElimination {
         //put results int array
         arr[2] = finalFactor.getTable().get(this.network.valueToNumber(wanted[0], wanted[1]) - 1);
         arr[2] = Math.round(arr[2] * 100000) / 100000.0d;
-        System.out.println(String.format("%.5f", arr[2]) + "," + (int) arr[1] + "," + (int) arr[0]);
     }
     public void function3(double[] arr) {
         //array containing: multiplication,addition and final answer
@@ -415,7 +413,7 @@ public class VariableElimination {
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.network.getBN().get(query[0]);
             for (int i = 0; i < queryNode.getParents().size(); i++) {
-                for (int j = 0; j < arr2.length-1; j++) {
+                for (int j = 0; j < arr2.length-1; j=j+2) {
                     if(arr2[j].contains(queryNode.getParents().get(i).getName())){
                         ans.add(valueToNumber(arr2[j], arr2[j + 1]));
                     }
@@ -423,7 +421,6 @@ public class VariableElimination {
             }
             ans.add(this.network.valueToNumber(query[0], query[1]));
             arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
-            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
             return;
         }
         //remove all leafs from the graph until you're left only with ancestors
@@ -483,7 +480,6 @@ public class VariableElimination {
         //put results int array
         arr[2] = finalFactor.getTable().get(this.network.valueToNumber(wanted[0], wanted[1]) - 1);
         arr[2] = Math.round(arr[2] * 100000) / 100000.0d;
-        System.out.println(String.format("%.5f", arr[2]) + "," + (int) arr[1] + "," + (int) arr[0]);
     }
     //gets the factor and name of evidence and value of evidence and if the evidence is this factor
     //and removes all probabilities that aren't the correct variable

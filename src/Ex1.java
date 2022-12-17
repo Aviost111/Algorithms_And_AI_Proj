@@ -1,5 +1,3 @@
-import jdk.jfr.internal.tool.Main;
-
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,46 +12,54 @@ public class Ex1 {
     public static Hashtable<String,BayesianNode> makeNetwork(String filename){
         Hashtable<String,BayesianNode>BN= new Hashtable<>();
         try {
-            System.out.println("hi");
             URL file = Ex1.class.getResource(filename);
             assert file != null;
             File URI = new File(file.toURI());
             Scanner sc = new Scanner(URI);
             String name="",data2,data,ParentName;
             ArrayList<String> arr;
+            //go over xml line by line
             while (sc.hasNextLine()) {
                 data2=sc.nextLine();
                 arr=new ArrayList<>();
+                //if it's a variable do this
                 if (data2.contains("VAR")) {
                     while (sc.hasNextLine()) {
                         data = sc.nextLine();
+                        //if it's the end of the variable break
                         if(data.contains("VAR")){
                             break;
                         }
+                        //if it's the name update var name to add to node
                         if (data.contains("<NAME>")) {
                             name=(mySplit(data));
                         }
+                        //if its outcomes add the variables to list to add to node
                         if (data.contains("<OUT")) {
                             arr.add(mySplit(data));
                         }
                     }
                     BayesianNode node = new BayesianNode(name,arr);
                     BN.put(node.getName(),node);
-//                    System.out.println(arr);
+                    //if it's a definition do this
                 }if(data2.contains("DEF")){
+                    //update name and variables
                     data=sc.nextLine();
                     name=(mySplit(data));
                     BayesianNode node =BN.get(name);
                     while (sc.hasNextLine()) {
                         data = sc.nextLine();
+                        //if it's the end of the definition break
                         if (data.contains("DEF")) {
                             break;
+                            //update parents
                         }if(data.contains("GIV")){
                             ParentName=mySplit(data);
                             BayesianNode parent=BN.get(ParentName);
                             node.addParent(parent);
                             parent.addChild(node);
                         }
+                        //update probabilities
                         if(data.contains("TAB")){
                             data=mySplit(data);
                             String[] arr2=data.split(" ");
@@ -62,36 +68,17 @@ public class Ex1 {
                             node.setCptVars();
                             node.setCptName();
                         }
-//                        System.out.println(data);
                     }
                 }
             }
-//            System.out.println(BN);
-//            System.out.println(BN.get("A").getCpt());
         } catch (FileNotFoundException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
         return BN;
     }
-
-    //P(B=T|J=T,M=T)
     public static void main(String []argv) {
-//
-
-//        try {
-//            String input="input.txt";
-//            File file=new File(input);
-//            Scanner sc= new Scanner(file);
-//            while(sc.hasNextLine()){
-//                String b=sc.nextLine();
-//                System.out.println(b);
-//                sc.nextLine();
-//            }
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
         try {
-            String input="input2.txt";
+            String input="input.txt";
             ArrayList<String> evidence;
             URL file = Ex1.class.getResource(input);
             assert file != null;
@@ -102,7 +89,6 @@ public class Ex1 {
             double[] ans;
             String [] wholeLine;
             net = sc.nextLine();
-            System.out.println(net);
             BayesianNetwork BN =new BayesianNetwork(makeNetwork(net));
             VariableElimination ve;
             FileWriter fw = new FileWriter(new File("src", "output.txt"));
@@ -118,14 +104,6 @@ public class Ex1 {
                 }
                 switch (functionType){
                     case 1:
-                        ArrayList<Integer> arr=new ArrayList<>();
-                        arr.add(2);
-                        arr.add(2);
-                        arr.add(2);
-                        arr.add(1);
-                        arr.add(2);
-                        arr.add(2);
-                        System.out.println(BN.getBN().get("C1").getCpt().getProb(arr));
                         BN.function1(line,ans);
                         finalAns=ans[2]+","+(int)ans[1]+","+(int)ans[0]+"\n";
                         fw.write(finalAns);

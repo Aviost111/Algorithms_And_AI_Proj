@@ -8,6 +8,9 @@ public class BayesianNetwork {
 
     public boolean inACpt(String query, String[] evidence) {
         ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
+        if (parents.size()==0){
+            return false;
+        }
         int count=0;
         BayesianNode node;
         if (parents.size() > evidence.length) {
@@ -26,25 +29,9 @@ public class BayesianNetwork {
         }
     }
 
-//    public boolean inACpt(String query, String[] evidence) {
-//        ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
-//        int count = 0;
-//        BayesianNode node;
-//        if (parents.size() != evidence.length) {
-//            return false;
-//        }
-//        for (int i = 0; i < evidence.length; i++) {
-//            node = this.BN.get(evidence[i]);
-//            if (!parents.contains(node)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     public BayesianNetwork(Hashtable<String, BayesianNode> BN) {
         this.BN = BN;
-//        this.factors=new ArrayList<>();
     }
 
     public int valueToNumber(String name, String value) {
@@ -76,8 +63,6 @@ public class BayesianNetwork {
             }
             ans.add(valueToNumber(arr2[0], arr2[1]));
             arr[2] = this.getBN().get(arr2[0]).getCpt().getProb(ans);
-            System.out.println(arr[2] + " ," + arr[0] + " " + arr[1] + " ");
-            //TODO wrong output from inCpt
             return;
         }
 
@@ -150,7 +135,6 @@ public class BayesianNetwork {
         arr[0] = times;
         arr[1] = adds;
         arr[2] = ans;
-        System.out.println(String.format("%.5f", arr[2]) + "," + (int) arr[0] + "," + (int) arr[1]);
     }
 
     public Hashtable<String, BayesianNode> getBN() {
