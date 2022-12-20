@@ -55,7 +55,7 @@ public class BayesianNetwork {
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.BN.get(query);
             for (int i = 0; i < queryNode.getParents().size(); i++) {
-                for (int j = 2; j < arr2.length-1; j++) {
+                for (int j = 2; j < arr2.length-1; j=j+2) {
                     if(arr2[j].contains(queryNode.getParents().get(i).getName())){
                         ans.add(valueToNumber(arr2[j], arr2[j + 1]));
                     }

@@ -319,7 +319,7 @@ public class VariableElimination {
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.network.getBN().get(query[0]);
             for (int i = 0; i < queryNode.getParents().size(); i++) {
-                for (int j = 0; j < arr2.length-1; j++) {
+                for (int j = 0; j < arr2.length-1; j=j+2) {
                     if(arr2[j].contains(queryNode.getParents().get(i).getName())){
                         ans.add(valueToNumber(arr2[j], arr2[j + 1]));
                     }
@@ -335,7 +335,9 @@ public class VariableElimination {
         //update your factors by evidence
         updateFactorsByEvidence();
         //sort the hidden variables by ABC
-        sortHidden(this.hidden);
+        if(this.hidden.size()!=0) {
+            sortHidden(this.hidden);
+        }
         //go over all hidden variables and eliminate them one by one
         while (!this.hidden.isEmpty()) {
             hiddenFactors = new ArrayList<>();
