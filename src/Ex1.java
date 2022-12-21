@@ -91,7 +91,7 @@ public class Ex1 {
             net = sc.nextLine();
             BayesianNetwork BN =new BayesianNetwork(makeNetwork(net));
             VariableElimination ve;
-            FileWriter fw = new FileWriter(new File("src", "output.txt"));
+            FileWriter fw = new FileWriter("output.txt");
             while (sc.hasNextLine()){
                 ans=new double[3];
                 line= sc.nextLine();

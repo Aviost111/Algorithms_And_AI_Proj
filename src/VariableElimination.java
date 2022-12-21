@@ -98,7 +98,7 @@ public class VariableElimination {
             //get iterator for factor 1 to know where to take the probability from
             for (int j = 0; j < factor1.getParents().size(); j++) {
 //                iterationFac1.add(iterationNewF.get(j));
-                if (factor1.getParents().get(j).getName().contains(newF.getName())) {
+                if (factor1.getParents().get(j).getName().equals(newF.getName())) {
                     iterationFac1.add(iterationNewF.get(iterationNewF.size() - 1));
                     continue;
                 }
@@ -107,7 +107,7 @@ public class VariableElimination {
                 iterationFac1.add(iterationNewF.get(indexForFact1));
             }
             //if query of fac1 isn't new query add him to the iterator of 1 after the last parent.
-            if (!nameFromFac1) {
+            if (!newF.getName().equals(factor1.getName())){
 //                iterationFac1.add(iterationNewF.get(factor1.getParents().size()));
                 indexForFact1 = newF.getParents().indexOf(this.network.getBN().get(factor1.getName()));
                 iterationFac1.add(iterationNewF.get(indexForFact1));
@@ -124,7 +124,7 @@ public class VariableElimination {
                 // index j in old the factor is in the iterator of the new factor
                 iterationFac2.add(iterationNewF.get(indexForFact2));
             }
-            if (factor2.getName().contains(newF.getName())) {
+            if (factor2.getName().equals(newF.getName())) {
                 iterationFac2.add(iterationNewF.get(iterationNewF.size() - 1));
             } else {
                 indexForFact2 = newF.getParents().indexOf(this.network.getBN().get(factor2.getName()));
@@ -212,7 +212,7 @@ public class VariableElimination {
         ArrayList<BayesianNode> newParents = new ArrayList<>();
         boolean nameIsFirstFac = false;
         //if factor 2 has a different name than query than make name be from factor2 otherwise make name from factor1
-        if (!factor2.getName().contains(hiddenName)) {
+        if (!factor2.getName().equals(hiddenName)) {
             newFactor.setName(factor2.getName());
         } else {
             newFactor.setName(factor1.getName());
@@ -222,19 +222,23 @@ public class VariableElimination {
         newFactor.setVars(this.network.getBN().get(newFactor.getName()).getVars());
         //update parents
         for (BayesianNode p : factor1.getParents()) {
-            if (p.getName().contains(newFactor.getName())) {
+            if (p.getName().equals(newFactor.getName())) {
                 continue;
             }
             newParents.add(p);
         }
-        if (!nameIsFirstFac) {
+        if (!factor1.getName().equals(newFactor.getName())) {
             newParents.add(this.network.getBN().get(factor1.getName()));
         }
         for (BayesianNode parent : factor2.getParents()) {
-            if (newParents.contains(parent)) {
+            if (newParents.contains(parent)||(newFactor.getName().equals(parent.getName()))) {
                 continue;
             }
             newParents.add(parent);
+        }
+        if((!factor2.getName().equals(newFactor.getName()))&&(!
+                newParents.contains(this.network.getBN().get(factor2.getName())))){
+            newParents.add(this.network.getBN().get(factor2.getName()));
         }
         newFactor.setParents(newParents);
         //factor multiplying for the new table
@@ -245,7 +249,7 @@ public class VariableElimination {
     }
 
     //joins factors
-    public CPT join(ArrayList<CPT> _factors, double[] arr, String hiddenName) {
+    public CPT join(ArrayList<CPT> _factors, double[] arr, String hiddenName,boolean isFinal) {
         CPT factor1, factor2, newFactor;
         String query = this.query.split("=")[0];
         //join all factors in that contain hidden
@@ -270,6 +274,13 @@ public class VariableElimination {
             return newFactor;
         }
         //eliminate the hidden
+        if((isFinal)&&(newFactor.getParents().size()!=0)&&(hiddenName.equals(query))){
+            if(newFactor.getName().equals(hiddenName)){
+                hiddenName=newFactor.getParents().get(0).getName();
+            }else{
+                hiddenName= newFactor.getName();
+            }
+        }
         newFactor = eliminateHidden(newFactor, hiddenName, arr);
 
         return newFactor;
@@ -277,6 +288,9 @@ public class VariableElimination {
 
     //sorts hidden factors by ABC with advanced bubble sort
     public void sortHidden(ArrayList<String> hidden) {
+        if(hidden.size()==0){
+            return;
+        }
         int size = hidden.get(0).length(), n = hidden.size();
         for (int k = size - 1; k >= 0; k--) {
             for (int i = 0; i < n - 1; i++) {
@@ -335,9 +349,9 @@ public class VariableElimination {
         //update your factors by evidence
         updateFactorsByEvidence();
         //sort the hidden variables by ABC
-        if(this.hidden.size()!=0) {
+//        if(this.hidden.size()!=0) {
             sortHidden(this.hidden);
-        }
+//        }
         //go over all hidden variables and eliminate them one by one
         while (!this.hidden.isEmpty()) {
             hiddenFactors = new ArrayList<>();
@@ -361,7 +375,7 @@ public class VariableElimination {
             //sort factors by size and ascii
             sortBy1(hiddenFactors);
             //join the factors
-            afterJoin = join(hiddenFactors, arr, hiddenName);
+            afterJoin = join(hiddenFactors, arr, hiddenName,false);
             //if factor after join is the size of 1 remove it
             if (afterJoin.getFactorSize() < afterJoin.getVars().size()) {
                 continue;
@@ -370,8 +384,19 @@ public class VariableElimination {
             this.factors.add(afterJoin);
         }
         sortBy1(this.factors);
+        String hiddenH=query[0];
+        for (CPT factor:this.factors) {
+            if(factor.getParents().size()!=0){
+                if (factor.getName().equals(hiddenH)){
+                    hiddenH=factor.getParents().get(0).getName();
+                }else{
+                    hiddenH=factor.getName();
+                }
+                break;
+            }
+        }
         //do the final join with query
-        finalFactor = join(this.factors, arr, this.factors.get(0).getName());
+        finalFactor = join(this.factors, arr, hiddenH,true);
         //find sum of variables to normalize.
         for (int i = 0; i < finalFactor.getFactorSize(); i++) {
             sumOfFinal += finalFactor.getTable().get(i);
@@ -431,7 +456,9 @@ public class VariableElimination {
         //update your factors by evidence
         updateFactorsByEvidence();
         //sort the hidden variables by ABC
-        sortBy2(this.hidden);
+        if(this.hidden.size()!=0) {
+            sortBy2(this.hidden);
+        }
         //go over all hidden variables and eliminate them one by one
         while (!this.hidden.isEmpty()) {
             hiddenFactors = new ArrayList<>();
@@ -455,7 +482,7 @@ public class VariableElimination {
             //sort factors by size and ascii
             sortBy1(hiddenFactors);
             //join the factors
-            afterJoin = join(hiddenFactors, arr, hiddenName);
+            afterJoin = join(hiddenFactors, arr, hiddenName,false);
             //if factor after join is the size of 1 remove it
             if (afterJoin.getFactorSize() < afterJoin.getVars().size()) {
                 continue;
@@ -465,8 +492,20 @@ public class VariableElimination {
             sortBy2(this.hidden);
         }
         sortBy1(this.factors);
+        //make sure hidden is query only if its alone
+        String hiddenH=query[0];
+        for (CPT factor:this.factors) {
+            if(factor.getParents().size()!=0){
+                if (factor.getName().equals(hiddenH)){
+                    hiddenH=factor.getParents().get(0).getName();
+                }else{
+                    hiddenH=factor.getName();
+                }
+                break;
+            }
+        }
         //do the final join with query
-        finalFactor = join(this.factors, arr, this.factors.get(0).getName());
+        finalFactor = join(this.factors, arr, hiddenH,true);
         //find sum of variables to normalize.
         for (int i = 0; i < finalFactor.getFactorSize(); i++) {
             sumOfFinal += finalFactor.getTable().get(i);
