@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="finished 3">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="just need to update straight to table">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BayesianNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNetwork.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ex1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/input.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +116,8 @@
       <updated>1668945974335</updated>
       <workItem from="1671625336961" duration="857000" />
       <workItem from="1671626789835" duration="4101000" />
-      <workItem from="1671634666805" duration="3134000" />
+      <workItem from="1671634666805" duration="3209000" />
+      <workItem from="1671694566242" duration="2301000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <created>1668947113008</created>
@@ -350,7 +350,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671572915656</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="just need to update straight to table">
+      <created>1671637818494</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1671637818494</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -377,7 +384,8 @@
     <MESSAGE value="fixed 2 more" />
     <MESSAGE value="finished 2" />
     <MESSAGE value="finished 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="finished 3" />
+    <MESSAGE value="just need to update straight to table" />
+    <option name="LAST_COMMIT_MESSAGE" value="just need to update straight to table" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

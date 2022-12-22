@@ -7,6 +7,26 @@ public class BayesianNetwork {
     private ArrayList<CPT> factors;
 
     public boolean inACpt(String query, String[] evidence) {
+        boolean isInCpt;
+        ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
+        if(parents.size()!= evidence.length){
+            return false;
+        }
+        for (BayesianNode parent:parents) {
+            isInCpt=false;
+            for (int i = 0; i <evidence.length; i++) {
+                if(parent.getName().equals(evidence[i])){
+                    isInCpt=true;
+                    break;
+                }
+            }
+            if(!isInCpt){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean inACpt2(String query, String[] evidence) {
         ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
         if (parents.size()==0){
             return false;
@@ -39,32 +59,47 @@ public class BayesianNetwork {
     }
 
     public void function1(String input,double[] arr) {
-        String[] arr2 = input.split("[()]")[1].split("[,|=]");
-        String query = arr2[0];
+        String[] fullEvidence = input.split("[()]")[1].split("[,|=]");
+        String query = fullEvidence[0];
         //get names of evidence
         int w = 0;
-        String[] evidence = new String[(arr2.length - 2) / 2];
-        for (int i = 2; i < arr2.length; i = i + 2) {
-            evidence[w] = arr2[i];
+        String[] evidence = new String[(fullEvidence.length - 2) / 2];
+        for (int i = 2; i < fullEvidence.length; i = i + 2) {
+            evidence[w] = fullEvidence[i];
             w++;
         }
         //checks if the query we want is in a factor and if it is gets the probability
         boolean isAFactor;
         isAFactor = inACpt(query, evidence);
-        if (isAFactor) {
+        if(isAFactor){
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.BN.get(query);
-            for (int i = 0; i < queryNode.getParents().size(); i++) {
-                for (int j = 2; j < arr2.length-1; j=j+2) {
-                    if(arr2[j].contains(queryNode.getParents().get(i).getName())){
-                        ans.add(valueToNumber(arr2[j], arr2[j + 1]));
+            for (BayesianNode parent:queryNode.getParents()) {
+                for (int i = 2; i <fullEvidence.length; i=i+2) {
+                    if(fullEvidence[i].equals(parent.getName())){
+                        ans.add(valueToNumber(fullEvidence[i],fullEvidence[i+1]));
+                        break;
                     }
                 }
             }
-            ans.add(valueToNumber(arr2[0], arr2[1]));
-            arr[2] = this.getBN().get(arr2[0]).getCpt().getProb(ans);
+            ans.add(valueToNumber(fullEvidence[0],fullEvidence[1]));
+            arr[2]= queryNode.getCpt().getProb(ans);
             return;
         }
+//        if (isAFactor) {
+//            ArrayList<Integer> ans = new ArrayList<>();
+//            BayesianNode queryNode=this.BN.get(query);
+//            for (int i = 0; i < queryNode.getParents().size(); i++) {
+//                for (int j = 2; j < fullEvidence.length-1; j=j+2) {
+//                    if(fullEvidence[j].contains(queryNode.getParents().get(i).getName())){
+//                        ans.add(valueToNumber(fullEvidence[j], fullEvidence[j + 1]));
+//                    }
+//                }
+//            }
+//            ans.add(valueToNumber(fullEvidence[0], fullEvidence[1]));
+//            arr[2] = this.getBN().get(fullEvidence[0]).getCpt().getProb(ans);
+//            return;
+//        }
 
         double numerator = 0, subSum = 1, denominator = 0;
         int times = 0, adds = 0;
@@ -85,17 +120,17 @@ public class BayesianNetwork {
             tableOfLists.put(key, list);
         }
         //makes the first name in array list the query and makes the array list in hashtable have null and arranges vars
-        keys.remove(arr2[0]);
-        keys.add(0, arr2[0]);
-        tableOfLists.get(arr2[0]).add(null);
-        int index = tableOfLists.get(arr2[0]).indexOf(BN.get(arr2[0]).getVars().indexOf(arr2[1]) + 1);
-        tableOfLists.get(arr2[0]).remove(index);
-        tableOfLists.get(arr2[0]).add(0, BN.get(arr2[0]).getVars().indexOf(arr2[1]) + 1);
+        keys.remove(fullEvidence[0]);
+        keys.add(0, fullEvidence[0]);
+        tableOfLists.get(fullEvidence[0]).add(null);
+        int index = tableOfLists.get(fullEvidence[0]).indexOf(BN.get(fullEvidence[0]).getVars().indexOf(fullEvidence[1]) + 1);
+        tableOfLists.get(fullEvidence[0]).remove(index);
+        tableOfLists.get(fullEvidence[0]).add(0, BN.get(fullEvidence[0]).getVars().indexOf(fullEvidence[1]) + 1);
         //changes the list of all known variables
-        for (int i = 2; i < arr2.length; i = i + 2) {
+        for (int i = 2; i < fullEvidence.length; i = i + 2) {
             list = new ArrayList<>();
-            list.add(valueToNumber(arr2[i], arr2[i + 1]));
-            tableOfLists.replace(arr2[i], list);
+            list.add(valueToNumber(fullEvidence[i], fullEvidence[i + 1]));
+            tableOfLists.replace(fullEvidence[i], list);
         }
         while (tableOfLists.get(keys.get(0)).get(indexes.get(0)) != null) {//does the addition while not every option has been done
             for (int i = 0; i < keys.size(); i++) {//goes over the keys and does the multiplication

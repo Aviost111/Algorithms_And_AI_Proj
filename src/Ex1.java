@@ -78,7 +78,7 @@ public class Ex1 {
     }
     public static void main(String []argv) {
         try {
-            String input="input.txt";
+            String input="input2.txt";
             ArrayList<String> evidence;
             URL file = Ex1.class.getResource(input);
             assert file != null;
