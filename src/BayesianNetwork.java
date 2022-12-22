@@ -26,29 +26,6 @@ public class BayesianNetwork {
         }
         return true;
     }
-    public boolean inACpt2(String query, String[] evidence) {
-        ArrayList<BayesianNode> parents = this.BN.get(query).getParents();
-        if (parents.size()==0){
-            return false;
-        }
-        int count=0;
-        BayesianNode node;
-        if (parents.size() > evidence.length) {
-            return false;
-        }
-        for (int i = 0; i < evidence.length; i++) {
-            node = this.BN.get(evidence[i]);
-            if (parents.contains(node)) {
-                count++;
-            }
-        }
-        if(count== parents.size()) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-
 
     public BayesianNetwork(Hashtable<String, BayesianNode> BN) {
         this.BN = BN;

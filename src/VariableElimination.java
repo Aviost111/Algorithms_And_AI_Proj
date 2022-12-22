@@ -329,20 +329,6 @@ public class VariableElimination {
         //check if the query that was given is in a cpt already.
         inCpt = this.network.inACpt(wanted[0], e);
         //if it is get the probability
-//        if (inCpt) {
-//            ArrayList<Integer> ans = new ArrayList<>();
-//            BayesianNode queryNode=this.network.getBN().get(query[0]);
-//            for (int i = 0; i < queryNode.getParents().size(); i++) {
-//                for (int j = 0; j < fullEvidence.length-1; j=j+2) {
-//                    if(fullEvidence[j].contains(queryNode.getParents().get(i).getName())){
-//                        ans.add(valueToNumber(fullEvidence[j], fullEvidence[j + 1]));
-//                    }
-//                }
-//            }
-//            ans.add(this.network.valueToNumber(query[0], query[1]));
-//            arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
-//            return;
-//        }
         if(inCpt){
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.network.getBN().get(query[0]);
@@ -451,20 +437,6 @@ public class VariableElimination {
         //check if the query that was given is in a cpt already.
         inCpt = this.network.inACpt(wanted[0], e);
         //if it is get the probability
-//        if (inCpt) {
-//            ArrayList<Integer> ans = new ArrayList<>();
-//            BayesianNode queryNode=this.network.getBN().get(query[0]);
-//            for (int i = 0; i < queryNode.getParents().size(); i++) {
-//                for (int j = 0; j < fullEvidence.length-1; j=j+2) {
-//                    if(fullEvidence[j].contains(queryNode.getParents().get(i).getName())){
-//                        ans.add(valueToNumber(fullEvidence[j], fullEvidence[j + 1]));
-//                    }
-//                }
-//            }
-//            ans.add(this.network.valueToNumber(query[0], query[1]));
-//            arr[2] = this.network.getBN().get(query[0]).getCpt().getProb(ans);
-//            return;
-//        }
         if(inCpt){
             ArrayList<Integer> ans = new ArrayList<>();
             BayesianNode queryNode=this.network.getBN().get(query[0]);
