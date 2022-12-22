@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="just need to update straight to table">
+    <list default="true" id="875e2cc2-0494-4248-87d9-b6c7096bcfb9" name="Changes" comment="finished and added option for inCpt2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ex1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ex1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BayesianNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BayesianNetwork.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VariableElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VariableElimination.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/input.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -117,6 +118,8 @@
       <workItem from="1671626789835" duration="4101000" />
       <workItem from="1671634666805" duration="3209000" />
       <workItem from="1671694566242" duration="3059000" />
+      <workItem from="1671697830779" duration="36000" />
+      <workItem from="1671707211177" duration="367000" />
     </task>
     <task id="LOCAL-00001" summary=".">
       <created>1668947113008</created>
@@ -363,7 +366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671697149796</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="finished and added option for inCpt2">
+      <created>1671697858303</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1671697858303</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -391,7 +401,8 @@
     <MESSAGE value="finished 2" />
     <MESSAGE value="finished 3" />
     <MESSAGE value="just need to update straight to table" />
-    <option name="LAST_COMMIT_MESSAGE" value="just need to update straight to table" />
+    <MESSAGE value="finished and added option for inCpt2" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished and added option for inCpt2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
